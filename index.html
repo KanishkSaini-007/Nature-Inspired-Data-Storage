@@ -452,7 +452,7 @@ for(const z of [-2.35,2.35]){const rl=new THREE.Mesh(new THREE.BoxGeometry(4.6,.
 const rr=new THREE.Mesh(new THREE.BoxGeometry(.08,.5,4.6),new THREE.MeshStandardMaterial({color:0x7fcf1a}));rr.position.set(TX+2.3,.9,0);root.add(rr);
 function label(t,x,y,z,wd){const c=document.createElement('canvas');c.width=1024;c.height=128;const g=c.getContext('2d');g.font='bold 56px sans-serif';const tw=Math.min(1000,g.measureText(t).width);g.fillStyle='#b6ff3b';g.textAlign='center';g.fillText(t,512,84,1000);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthTest:false}));const w=wd;s.scale.set(w,w/8,1);s.position.set(x,y,z);root.add(s)}
 label('Population (tower = one plan)',-6.5,5.3,0,8.5);label('Best plan on the truck',TX,3.8,0,7.5);label('Left behind',TX+3.6,.5,5,3.4);
-for(const [x,z] of [[-2,2.4],[-2,-2.4],[2,2.4],[2,-2.4],[-3.4,2.4],[-3.4,-2.4]]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.4,.4,.35,16),new THREE.MeshStandardMaterial({color:0x111111}));w.rotation.x=Math.PI/2;w.position.set(TX+x,.4,z);root.add(w)}
+for(const [x,z] of [[-2,2.4],[-2,-2.4],[2,2.4],[2,-2.4],[-3.4,2.4],[-3.4,-2.4]]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.4,.4,.35,16),new THREE.MeshStandardMaterial({color:0xf5f5f5,roughness:.5}));w.rotation.x=Math.PI/2;w.position.set(TX+x,.4,z);root.add(w)}
 const crates=ITEMS.map((it,i)=>{const s=.3+Math.cbrt(it[1])*.2;const col=new THREE.Color().setHSL(i/ITEMS.length*.9,.65,.55);
   const m=new THREE.Mesh(new THREE.BoxGeometry(s,s,s),new THREE.MeshStandardMaterial({color:col,roughness:.6,transparent:true}));m.userData={s,tx:0,ty:0,tz:0,col};m.position.set(0,s/2,5);root.add(m);return m});
 window.snapGA3D=function(){window.__snap=1;setTimeout(()=>window.__snap=0,300)};
