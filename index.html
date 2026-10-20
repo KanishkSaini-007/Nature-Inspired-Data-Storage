@@ -59,6 +59,8 @@ button:hover{background:#cbff66}button.ghost{background:transparent;color:var(--
 .stat{background:#0a0f09;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .stat b{display:block;font-size:22px;color:var(--lime)}.stat span{font-size:12px;color:var(--mut)}
 .out{font-size:20px;background:#0a0f09;border:1px dashed var(--lime2);border-radius:12px;padding:12px 14px;word-break:break-word;min-height:50px}
+.dmg{background:var(--red);color:#fff;border-radius:4px;padding:0 4px;font-weight:700}
+.out.pop{animation:pop .9s ease}@keyframes pop{0%{box-shadow:0 0 0 0 #b6ff3b;transform:scale(.97)}50%{box-shadow:0 0 30px 6px #b6ff3b99;transform:scale(1.02)}100%{box-shadow:0 0 0 0 #b6ff3b00;transform:scale(1)}}
 .badge{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:700}
 .ok{background:#b6ff3b26;color:var(--lime)}.no{background:#ff5d5d26;color:var(--red)}
 canvas.gl{height:380px;cursor:grab;touch-action:none}canvas.gl:active{cursor:grabbing}
@@ -151,6 +153,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
     </div>
     <div class="lbl"><span>Message read back from DNA</span><span id="verdict"></span></div>
     <div class="out" id="out"></div>
+    <div id="cap2" class="note" style="margin-top:8px;font-size:14px"></div>
     <p class="note">Tip: set 1 copy and a high error rate, then watch the message break. Switch to 5 copies and it usually comes back. Real systems use stronger error-correcting codes, but majority voting shows the idea.</p>
 
     <div id="expbox" style="display:none">
@@ -259,7 +262,15 @@ function dnaRun(){
   let fixedCount=0;for(let i=0;i<cons.length;i++){let errsHere=0;cps.forEach(m=>errsHere+=m.flags[i]);if(errsHere&&cons[i]===t.bases[i])fixedCount+=errsHere}
   $('s2').textContent=nCopies===1?0:fixedCount;
   const back=fromBases(cons),same=back===$('msg').value;
-  $('out').textContent=back;
+  const ob=new TextEncoder().encode($('msg').value),rb=[];for(let i=0;i+3<cons.length;i+=4){let v=0;for(let k=0;k<4;k++)v=v*4+BASES.indexOf(cons[i+k]);rb.push(v)}
+  let pos=0,oh='';for(const chh of $('msg').value){const nb=new TextEncoder().encode(chh).length;let okc=true,got=[];for(let k=0;k<nb;k++){got.push(rb[pos+k]);if(rb[pos+k]!==ob[pos+k])okc=false}pos+=nb;
+    if(okc)oh+=esc(chh)===' '?'&nbsp;':esc(chh);else{let g=new TextDecoder().decode(new Uint8Array(got));if(!/^[\x21-\x7e]$/.test(g))g='?';oh+='<span class="dmg" title="should be: '+esc(chh)+'">'+esc(g)+'</span>'}}
+  $('out').innerHTML=oh;
+  const cap=$('cap2');if(same)cap.textContent=total?'Voting fixed all '+total+' mistake'+(total==1?'':'s')+'. The message is back.':'No mistakes happened this time.';
+  else cap.textContent=nCopies===1?"1 copy can't fix errors, so letters get damaged (shown in red). Try 3 or 5 copies.":'Too many mistakes for '+nCopies+' copies. Try more copies or a lower error rate.';
+  cap.style.color=same?'var(--lime)':'var(--red)';
+  if(same&&window.lastOk===false){const o=$('out');o.classList.remove('pop');void o.offsetWidth;o.classList.add('pop')}
+  window.lastOk=same;
   dnaView={orig:t.bases,copy:cps[0].s,cons:cons,copyFlags:cps[0].flags,consFlags:wrongAfter};if(window.updateHelix)updateHelix();
   $('verdict').innerHTML=same?'<span class="badge ok">✔ Recovered perfectly</span>':'<span class="badge no">✘ Message damaged ('+left+' wrong base'+(left==1?'':'s')+')</span>';
 }
