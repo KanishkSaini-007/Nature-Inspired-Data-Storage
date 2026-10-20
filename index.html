@@ -410,7 +410,7 @@ function mk(canvas,fov,bg){const r=new THREE.WebGLRenderer({canvas,antialias:tru
   canvas.addEventListener('pointerup',()=>o.drag=false);
   canvas.addEventListener('pointermove',e=>{if(!o.drag)return;o.yaw+=(e.clientX-o.lx)*.01;o.pitch=Math.max(-.8,Math.min(.8,o.pitch+(e.clientY-o.ly)*.006));o.lx=e.clientX;o.ly=e.clientY});
   live.push(o);return o}
-function fit(o){const w=o.canvas.clientWidth,h=o.canvas.clientHeight;if(o.w!==w||o.h!==h){o.w=w;o.h=h;o.r.setSize(w,h,false);o.c.aspect=w/h;o.c.updateProjectionMatrix()}}
+function fitR(o){const w=o.canvas.clientWidth,h=o.canvas.clientHeight;if(o.w!==w||o.h!==h){o.w=w;o.h=h;o.r.setSize(w,h,false);o.c.aspect=w/h;o.c.updateProjectionMatrix()}}
 const COL={A:0x4fc3f7,C:0xffd54f,G:0xb6ff3b,T:0xff8a65},CMP={A:'T',T:'A',C:'G',G:'C'},RED=0xff3b3b;
 const mat={};function M(c,e){const k=c+'_'+(e||0);return mat[k]||(mat[k]=new THREE.MeshStandardMaterial({color:c,roughness:.4,metalness:.1,emissive:e||0}))}
 /* --- helix --- */
@@ -439,7 +439,7 @@ window.updateHelix=function(){
 $('hpos').oninput=updateHelix;
 document.querySelectorAll('#hsel button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#hsel button').forEach(x=>x.classList.remove('on'));b.classList.add('on');hview=b.dataset.v;updateHelix()});
 /* --- GA scene --- */
-const G=mk($('gl3'),42);G.c.position.set(0,8,15);G.c.lookAt(0,1,0);
+const G=mk($('gl3'),42);G.c.position.set(0,7.5,13.5);G.c.lookAt(-.5,1.2,.5);
 const root=new THREE.Group();G.s.add(root);
 const grid=new THREE.GridHelper(30,30,0x26331f,0x1a2415);grid.position.y=0;root.add(grid);
 const towers=[];const BG=new THREE.BoxGeometry(1,1,1);
@@ -448,28 +448,34 @@ const TX=5.2;// truck centre x
 const bed=new THREE.Mesh(new THREE.BoxGeometry(4.6,.2,4.6),new THREE.MeshStandardMaterial({color:0x3a4a32}));bed.position.set(TX,.55,0);root.add(bed);
 const rail=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(4.6,1.5,4.6)),new THREE.LineBasicMaterial({color:0xb6ff3b}));rail.position.set(TX,1.2,0);root.add(rail);
 const cab=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.6,4.6),new THREE.MeshStandardMaterial({color:0x7fcf1a}));cab.position.set(TX-3.1,1.0,0);root.add(cab);
+const win=new THREE.Mesh(new THREE.BoxGeometry(.1,.7,3.6),new THREE.MeshStandardMaterial({color:0x10200a,emissive:0x1e3d10}));win.position.set(TX-3.8,1.35,0);root.add(win);
+for(const z of [-2.35,2.35]){const rl=new THREE.Mesh(new THREE.BoxGeometry(4.6,.5,.08),new THREE.MeshStandardMaterial({color:0x7fcf1a}));rl.position.set(TX,.9,z);root.add(rl)}
+const rr=new THREE.Mesh(new THREE.BoxGeometry(.08,.5,4.6),new THREE.MeshStandardMaterial({color:0x7fcf1a}));rr.position.set(TX+2.3,.9,0);root.add(rr);
+function label(t,x,y,z,sc){const c=document.createElement('canvas');c.width=512;c.height=96;const g=c.getContext('2d');g.fillStyle='#b6ff3b';g.font='bold 40px sans-serif';g.textAlign='center';g.fillText(t,256,60);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthTest:false}));s.scale.set(sc||6,sc?sc*.19:1.1,1);s.position.set(x,y,z);root.add(s)}
+label('Population (tower = one plan)',-7,5.4,0,6);label('Best plan on the truck',TX,3.4,0,6);label('Left behind',TX,.9,5.4,3);
 for(const [x,z] of [[-2,2.4],[-2,-2.4],[2,2.4],[2,-2.4],[-3.4,2.4],[-3.4,-2.4]]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.4,.4,.35,16),new THREE.MeshStandardMaterial({color:0x111111}));w.rotation.x=Math.PI/2;w.position.set(TX+x,.4,z);root.add(w)}
 const crates=ITEMS.map((it,i)=>{const s=.3+Math.cbrt(it[1])*.2;const col=new THREE.Color().setHSL(i/ITEMS.length*.9,.65,.55);
   const m=new THREE.Mesh(new THREE.BoxGeometry(s,s,s),new THREE.MeshStandardMaterial({color:col,roughness:.6,transparent:true}));m.userData={s,tx:0,ty:0,tz:0,col};m.position.set(0,s/2,5);root.add(m);return m});
+window.snapGA3D=function(){window.__snap=1;setTimeout(()=>window.__snap=0,300)};
 window.updateGA3D=function(){
   if(typeof bestEver==='undefined'||!bestEver)return;
   const maxF=Math.max(optimal,1),cols=Math.ceil(Math.sqrt(pop.length)),sp=.55;
-  towers.forEach((t,i)=>{if(i>=pop.length){t.visible=false;return}t.visible=true;const f=fit(pop[i]);t.userData.h=f?Math.max(.1,f/maxF*4.5):.06;
+  towers.forEach((t,i)=>{if(i>=pop.length){t.visible=false;return}t.visible=true;const f=fit(pop[i]);t.userData.h=f?Math.max(.1,f/maxF*5.5):.06;
     const ratio=f/maxF;t.material.color.set(f?new THREE.Color().setHSL(.25,.9,.25+.35*ratio):0xff5d5d);
     t.userData.x=-7.5+(i%cols-cols/2)*sp+.5;t.userData.z=(Math.floor(i/cols)-cols/2)*sp});
   let slot=0,off=0;
   crates.forEach((c,i)=>{const u=c.userData,on=bestEver[i];
     if(on){const col=slot%4,row=Math.floor(slot/4)%4;u.tx=TX+(row-1.5)*1.1;u.tz=(col-1.5)*1.1;u.ty=.65+u.s/2+Math.floor(slot/16)*1.1;slot++;c.material.color.copy(u.col);c.material.opacity=1}
-    else{u.tx=-8+off*.95;u.tz=6.2;u.ty=u.s/2;off++;c.material.color.set(0x6b7a64);c.material.opacity=.55}});
+    else{u.tx=TX-4.2+(off%6)*1.1;u.tz=4.6+Math.floor(off/6)*1.1;u.ty=u.s/2;off++;c.material.color.set(0x5d6b57);c.material.opacity=1}});
 };
 /* loop */
 let last=performance.now();
 function loop(t){requestAnimationFrame(loop);const dt=Math.min(.05,(t-last)/1000);last=t;
-  for(const o of live){if(!o.visible)continue;fit(o)}
+  for(const o of live){if(!o.visible)continue;fitR(o)}
   if(H.visible){spin.rotation.y+=dt*.8;axis.rotation.x=H.pitch;axis.rotation.y=H.yaw;H.r.render(H.s,H.c)}
   if(G.visible){root.rotation.y=Math.sin(t/4000)*.25+G.yaw;root.rotation.x=G.pitch*.5;
     for(const m of towers){if(!m.visible)continue;const u=m.userData;m.scale.set(.4,m.scale.y+(u.h-m.scale.y)*.15,.4);m.position.set(u.x,m.scale.y/2,u.z)}
-    for(const c of crates){const u=c.userData;c.position.x+=(u.tx-c.position.x)*.12;c.position.y+=(u.ty-c.position.y)*.12;c.position.z+=(u.tz-c.position.z)*.12}
+    for(const c of crates){const u=c.userData;u.snap=!!window.__snap;const k=c.userData.snap?1:.14;c.position.x+=(u.tx-c.position.x)*k;c.position.y+=(u.ty+(Math.abs(u.tx-c.position.x)>.3?1.5:0)-c.position.y)*k;c.position.z+=(u.tz-c.position.z)*k}
     G.r.render(G.s,G.c)}}
 requestAnimationFrame(loop);
 updateHelix();updateGA3D();
