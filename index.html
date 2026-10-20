@@ -14,7 +14,15 @@ nav b{color:var(--lime);margin-right:auto;letter-spacing:.3px}
 nav a{color:var(--txt);text-decoration:none;padding:6px 12px;border-radius:99px;font-size:14px}
 nav a:hover{background:var(--card2);color:var(--lime)}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.herofull{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+#hero{position:absolute;inset:0;width:100%;height:100%;display:block}
+.herofull:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#090d08f2 8%,#090d0899 45%,transparent 80%),linear-gradient(0deg,#090d08 0,transparent 25%);pointer-events:none}
+.herofull .wrap{position:relative;z-index:2;width:100%}
+.herofull a{text-decoration:none}
+.tick{margin-top:26px;color:var(--lime);font-size:15px;min-height:62px;line-height:1.7;text-shadow:0 0 12px #b6ff3b66}
+.tick b{color:var(--txt);font-weight:600}
 .hero{padding:64px 0 36px}
+.hero h1{text-shadow:0 2px 30px #000}
 .tag{display:inline-block;border:1px solid var(--lime2);color:var(--lime);border-radius:99px;padding:3px 12px;font-size:13px;margin-bottom:16px}
 h1{font-size:clamp(30px,5vw,52px);line-height:1.1;margin:0 0 14px}
 h1 span{color:var(--lime)}
@@ -76,8 +84,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
 <body>
 <nav><b>🧬 Nature-Inspired Storage</b><a href="#intro">Intro</a><a href="#dna">DNA Storage Lab</a><a href="#ga">Genetic Algorithm Lab</a><a href="#end">Summary</a></nav>
 
-<div class="wrap">
-<header class="hero" id="intro">
+<div class="herofull" id="intro"><canvas id="hero"></canvas><div class="wrap">
+<header class="hero">
   <span class="tag">Interactive project &middot; works offline</span>
   <h1>Nature-Inspired <span>Data Storage</span> Systems</h1>
   <p>Nature has been storing and improving information for billions of years. DNA keeps the instructions of every living thing, and evolution keeps finding better answers by trial and selection. This page has two small labs where you can try both ideas yourself.</p>
@@ -86,7 +94,10 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
     <div class="card"><h3>2. Genetic Algorithm and its application</h3><p>Watch a population of "cargo plans" evolve over generations to pack the most valuable load under a weight limit.</p></div>
     <div class="card"><h3>Why these two together?</h3><p>Both are copied from nature. DNA is how nature <i>stores</i> data. A genetic algorithm is how nature <i>searches</i> for the best choice, like what is best to keep in limited space.</p></div>
   </div>
-</header>
+  <div class="btns" style="margin-top:22px"><a href="#dna"><button>🧬 Try the DNA Lab</button></a><a href="#ga"><button class="ghost">🚚 Try the Genetic Algorithm Lab</button></a></div>
+  <div class="tick mono" id="tick"></div>
+</header></div></div>
+<div class="wrap">
 
 <!-- ================= DNA ================= -->
 <section id="dna">
@@ -324,6 +335,56 @@ $('cap').oninput=()=>$('capv').textContent=$('cap').value;$('pop').oninput=()=>$
 $('mut').oninput=()=>{mutRate=$('mut').value/100;$('mutv').textContent=$('mut').value+'%'};
 $('spd').oninput=()=>{$('spdv').textContent=SPNAME[$('spd').value];if(timer){stop();start()}};
 reset();
+
+
+/* ---------- HERO: fly-through DNA tunnel ---------- */
+(function(){
+const words=['DNA','Nature','Hello','Evolve','Store'];let wi=0;
+function tick(){const w=words[wi++%words.length],t=toBases(w);$('tick').innerHTML='<b>"'+w+'"</b> &rarr; '+t.bits+'<br>&rarr; '+t.bases.replace(/(....)/g,'$1 ')}
+tick();setInterval(tick,2600);
+if(typeof THREE==='undefined')return;
+const cv=$('hero'),r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:false});r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.setClearColor(0x090d08,1);
+const sc=new THREE.Scene();sc.fog=new THREE.FogExp2(0x090d08,.03);
+const cam=new THREE.PerspectiveCamera(70,2,.1,200);
+sc.add(new THREE.AmbientLight(0xffffff,.55));const pl=new THREE.PointLight(0xb6ff3b,2.2,40);sc.add(pl);
+const msg=toBases('Nature-Inspired Data Storage Systems').bases;
+const N=260,R=2.6,RISE=.42,TURN=.62;
+const sph=new THREE.InstancedMesh(new THREE.SphereGeometry(1,12,8),new THREE.MeshStandardMaterial({roughness:.35,metalness:.2}),N*2);
+const cg=new THREE.CylinderGeometry(1,1,1,8);cg.rotateZ(Math.PI/2);
+const rung=new THREE.InstancedMesh(cg,new THREE.MeshStandardMaterial({roughness:.4}),N*2);
+const COLS={A:0x4fc3f7,C:0xffd54f,G:0xb6ff3b,T:0xff8a65},CMP={A:'T',T:'A',C:'G',G:'C'};
+const dm=new THREE.Object3D(),col=new THREE.Color(),base=[];
+for(let i=0;i<N;i++){const b=msg[i%msg.length],q=CMP[b],a=i*TURN,z=-i*RISE,cx=Math.cos(a),cy=Math.sin(a);
+  for(const [k,s,c] of [[0,1,b],[1,-1,q]]){
+    dm.position.set(cx*R*s,cy*R*s,z);dm.rotation.set(0,0,0);dm.scale.setScalar(.17);dm.updateMatrix();sph.setMatrixAt(i*2+k,dm.matrix);sph.setColorAt(i*2+k,col.set(0x7a8f70));
+    dm.position.set(cx*R*s/2,cy*R*s/2,z);dm.rotation.set(0,0,a);dm.scale.set(R/2,.06,.06);dm.updateMatrix();rung.setMatrixAt(i*2+k,dm.matrix);rung.setColorAt(i*2+k,col.set(COLS[c]));
+  }
+  base.push([COLS[b],COLS[q]]);}
+sph.instanceMatrix.needsUpdate=rung.instanceMatrix.needsUpdate=true;sc.add(sph,rung);
+// dust
+const P=1400,pp=new Float32Array(P*3);for(let i=0;i<P;i++){const a=Math.random()*6.28,rr=1+Math.random()*9;pp[i*3]=Math.cos(a)*rr;pp[i*3+1]=Math.sin(a)*rr;pp[i*3+2]=-Math.random()*N*RISE}
+const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
+sc.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xb6ff3b,size:.06,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false})));
+let mx=0,my=0,vis=true;
+addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)});
+new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(cv);
+// mutation flashes: a rung turns red then votes back
+let flash=null;
+function pickFlash(z){const i=Math.max(0,Math.floor(-z/RISE)+8+(Math.random()*10|0));flash={i,t:0};}
+let t0=performance.now(),pz=0,lastF=0,w=0,h=0;
+function loop(now){requestAnimationFrame(loop);if(!vis)return;const dt=Math.min(.05,(now-t0)/1000);t0=now;
+  const cw=cv.clientWidth,ch=cv.clientHeight;if(cw!==w||ch!==h){w=cw;h=ch;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+  pz+=dt*3.2;const span=(N-60)*RISE;const z=-(pz%span);
+  cam.position.set(-5.5+mx*2,1.8-my*1.5,z+2);cam.rotation.set(0,0,0);cam.lookAt(1.5,0,z-12);cam.rotateZ(Math.sin(now/5000)*.12);
+  pl.position.set(0,0,z-3);
+  if(!flash&&now-lastF>3200){pickFlash(z);lastF=now}
+  if(flash){flash.t+=dt;const i=flash.i;if(i<N){const red=flash.t<1.4;const k=(flash.t>=1.4&&flash.t<2.2)?.5:0;
+      rung.setColorAt(i*2,col.set(red?0xff3b3b:flash.t<2.2?0xffffff:base[i][0]));rung.setColorAt(i*2+1,col.set(flash.t<2.2?(red?0xff3b3b:0xffffff):base[i][1]));
+      if(flash.t>2.2){rung.setColorAt(i*2,col.set(base[i][0]));rung.setColorAt(i*2+1,col.set(base[i][1]));flash=null}
+      rung.instanceColor.needsUpdate=true}else flash=null}
+  r.render(sc,cam)}
+requestAnimationFrame(loop);
+})();
 
 /* ---------- 3D (Three.js) ---------- */
 (function(){
