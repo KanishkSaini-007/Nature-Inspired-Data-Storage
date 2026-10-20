@@ -450,8 +450,8 @@ const cab=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.6,4.6),new THREE.MeshStanda
 const win=new THREE.Mesh(new THREE.BoxGeometry(.1,.7,3.6),new THREE.MeshStandardMaterial({color:0x10200a,emissive:0x1e3d10}));win.position.set(TX-3.8,1.35,0);root.add(win);
 for(const z of [-2.35,2.35]){const rl=new THREE.Mesh(new THREE.BoxGeometry(4.6,.5,.08),new THREE.MeshStandardMaterial({color:0x7fcf1a}));rl.position.set(TX,.9,z);root.add(rl)}
 const rr=new THREE.Mesh(new THREE.BoxGeometry(.08,.5,4.6),new THREE.MeshStandardMaterial({color:0x7fcf1a}));rr.position.set(TX+2.3,.9,0);root.add(rr);
-function label(t,x,y,z,sc){const c=document.createElement('canvas');c.width=512;c.height=96;const g=c.getContext('2d');g.fillStyle='#b6ff3b';g.font='bold 40px sans-serif';g.textAlign='center';g.fillText(t,256,60);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthTest:false}));s.scale.set(sc||6,sc?sc*.19:1.1,1);s.position.set(x,y,z);root.add(s)}
-label('Population (tower = one plan)',-7,5.4,0,6);label('Best plan on the truck',TX,3.4,0,6);label('Left behind',TX,.9,5.4,3);
+function label(t,x,y,z,wd){const c=document.createElement('canvas');c.width=1024;c.height=128;const g=c.getContext('2d');g.font='bold 56px sans-serif';const tw=Math.min(1000,g.measureText(t).width);g.fillStyle='#b6ff3b';g.textAlign='center';g.fillText(t,512,84,1000);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthTest:false}));const w=wd;s.scale.set(w,w/8,1);s.position.set(x,y,z);root.add(s)}
+label('Population (tower = one plan)',-6.5,5.4,0,8.5);label('Best plan on the truck',TX,3.8,0,7.5);label('Left behind',TX+3.6,.5,5,3.4);
 for(const [x,z] of [[-2,2.4],[-2,-2.4],[2,2.4],[2,-2.4],[-3.4,2.4],[-3.4,-2.4]]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.4,.4,.35,16),new THREE.MeshStandardMaterial({color:0x111111}));w.rotation.x=Math.PI/2;w.position.set(TX+x,.4,z);root.add(w)}
 const crates=ITEMS.map((it,i)=>{const s=.3+Math.cbrt(it[1])*.2;const col=new THREE.Color().setHSL(i/ITEMS.length*.9,.65,.55);
   const m=new THREE.Mesh(new THREE.BoxGeometry(s,s,s),new THREE.MeshStandardMaterial({color:col,roughness:.6,transparent:true}));m.userData={s,tx:0,ty:0,tz:0,col};m.position.set(0,s/2,5);root.add(m);return m});
@@ -472,7 +472,7 @@ let last=performance.now();
 function loop(t){requestAnimationFrame(loop);const dt=Math.min(.05,(t-last)/1000);last=t;
   for(const o of live){if(!o.visible)continue;fitR(o)}
   if(H.visible){spin.rotation.y+=dt*.8;axis.rotation.x=H.pitch;axis.rotation.y=H.yaw;H.r.render(H.s,H.c)}
-  if(G.visible){root.rotation.y=Math.sin(t/4000)*.25+G.yaw;root.rotation.x=G.pitch*.5;
+  if(G.visible){G.c.position.z=Math.max(13.5,13.5*2.1/G.c.aspect);G.c.position.y=7.5*G.c.position.z/13.5;G.c.lookAt(-.5,1.2,.5);root.rotation.y=Math.sin(t/4000)*.25+G.yaw;root.rotation.x=G.pitch*.5;
     for(const m of towers){if(!m.visible)continue;const u=m.userData;m.scale.set(.4,m.scale.y+(u.h-m.scale.y)*.15,.4);m.position.set(u.x,m.scale.y/2,u.z)}
     for(const c of crates){const u=c.userData;u.snap=!!window.__snap;const k=c.userData.snap?1:.14;c.position.x+=(u.tx-c.position.x)*k;c.position.y+=(u.ty+(Math.abs(u.tx-c.position.x)>.3?1.5:0)-c.position.y)*k;c.position.z+=(u.tz-c.position.z)*k}
     G.r.render(G.s,G.c)}}
