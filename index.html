@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nature-Inspired Data Storage Systems | Kanishk Saini</title>
+<style>
+:root{--bg:#090d08;--card:#121910;--card2:#172014;--line:#26331f;--lime:#b6ff3b;--lime2:#7fcf1a;--txt:#e8f0e2;--mut:#93a58b;--red:#ff5d5d;--A:#4fc3f7;--C:#ffd54f;--G:#b6ff3b;--T:#ff8a65}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1200px 500px at 70% -10%,#17250f 0,transparent 60%),var(--bg);color:var(--txt);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--lime)}
+nav{position:sticky;top:0;z-index:10;display:flex;gap:6px;align-items:center;padding:10px 20px;background:#090d08ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+nav b{color:var(--lime);margin-right:auto;letter-spacing:.3px}
+nav a{color:var(--txt);text-decoration:none;padding:6px 12px;border-radius:99px;font-size:14px}
+nav a:hover{background:var(--card2);color:var(--lime)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+.hero{padding:64px 0 36px}
+.tag{display:inline-block;border:1px solid var(--lime2);color:var(--lime);border-radius:99px;padding:3px 12px;font-size:13px;margin-bottom:16px}
+h1{font-size:clamp(30px,5vw,52px);line-height:1.1;margin:0 0 14px}
+h1 span{color:var(--lime)}
+.hero p{max-width:720px;color:var(--mut);font-size:18px}
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.card h3{margin:0 0 6px;color:var(--lime);font-size:17px}
+.card p,.card li{color:#c9d6c2;font-size:15px;margin:4px 0}
+section{padding:40px 0;border-top:1px solid var(--line)}
+h2{font-size:30px;margin:0 0 6px}h2 small{display:block;font-size:14px;color:var(--lime);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.lead{color:var(--mut);max-width:780px;margin:0 0 18px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+.lab{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--lime2);border-radius:20px;padding:22px;margin-top:22px;box-shadow:0 0 40px #b6ff3b14}
+.lab h3{margin:0 0 12px;font-size:20px}
+label{display:block;font-size:14px;color:var(--mut);margin:12px 0 4px}
+input[type=text],textarea{width:100%;background:#0a0f09;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font:inherit}
+input[type=text]:focus{outline:2px solid var(--lime2)}
+input[type=range]{width:100%;accent-color:var(--lime)}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:200px}
+button{background:var(--lime);color:#10200a;border:0;border-radius:10px;padding:9px 16px;font:600 14px inherit;font-family:inherit;cursor:pointer}
+button:hover{background:#cbff66}button.ghost{background:transparent;color:var(--lime);border:1px solid var(--lime2)}button.ghost:hover{background:#b6ff3b1a}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.seg{display:flex;gap:6px}.seg button{background:#0a0f09;color:var(--txt);border:1px solid var(--line)}.seg button.on{background:var(--lime);color:#10200a;border-color:var(--lime)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.dna{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;word-break:break-all;background:#0a0f09;border:1px solid var(--line);border-radius:10px;padding:10px 12px;max-height:150px;overflow:auto}
+.dna i{font-style:normal;display:inline-block;width:1.15em;text-align:center;border-radius:4px;margin:0 1px}
+.dna i.A{color:var(--A)}.dna i.C{color:var(--C)}.dna i.G{color:var(--G)}.dna i.T{color:var(--T)}
+.dna i.bad{background:var(--red);color:#fff;font-weight:700}
+.dna i.fix{outline:1.5px solid var(--lime);border-radius:4px}
+.dna u{display:inline-block;width:.5em;text-decoration:none}
+.lbl{font-size:13px;color:var(--mut);margin:14px 0 4px;display:flex;justify-content:space-between;gap:8px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
+.stat{background:#0a0f09;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:22px;color:var(--lime)}.stat span{font-size:12px;color:var(--mut)}
+.out{font-size:20px;background:#0a0f09;border:1px dashed var(--lime2);border-radius:12px;padding:12px 14px;word-break:break-word;min-height:50px}
+.badge{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:700}
+.ok{background:#b6ff3b26;color:var(--lime)}.no{background:#ff5d5d26;color:var(--red)}
+canvas.gl{height:380px;cursor:grab;touch-action:none}canvas.gl:active{cursor:grabbing}
+canvas{width:100%;background:#0a0f09;border:1px solid var(--line);border-radius:12px;display:block}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);flex-wrap:wrap;margin-top:6px}.legend span:before{content:"";display:inline-block;width:12px;height:3px;margin-right:6px;vertical-align:middle;background:var(--c)}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:6px}
+.it{background:#0a0f09;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13px;transition:.2s}
+.it b{display:block;font-size:14px}.it span{color:var(--mut)}
+.it.on{border-color:var(--lime);background:#b6ff3b17;box-shadow:inset 0 0 0 1px var(--lime)}
+.it.on span{color:#cfe8b0}
+.bar{height:14px;background:#0a0f09;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:6px 0}
+.bar div{height:100%;background:linear-gradient(90deg,var(--lime2),var(--lime));transition:width .2s}
+.genes{display:flex;gap:3px;flex-wrap:wrap}.genes i{font-style:normal;width:22px;height:26px;border-radius:5px;display:grid;place-items:center;font:600 12px ui-monospace,monospace;background:#0a0f09;border:1px solid var(--line);color:var(--mut)}
+.genes i.on{background:var(--lime);color:#10200a;border-color:var(--lime)}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--mut);font-weight:500}
+.steps{counter-reset:s;list-style:none;padding:0;margin:8px 0}
+.steps li{counter-increment:s;position:relative;padding:6px 0 6px 38px;color:#c9d6c2}
+.steps li:before{content:counter(s);position:absolute;left:0;top:5px;width:26px;height:26px;border-radius:50%;background:var(--lime);color:#10200a;font-weight:700;display:grid;place-items:center;font-size:13px}
+.note{color:var(--mut);font-size:13px}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);font-size:14px;margin-top:20px}
+</style>
+</head>
+<body>
+<nav><b>🧬 Nature-Inspired Storage</b><a href="#intro">Intro</a><a href="#dna">DNA Storage Lab</a><a href="#ga">Genetic Algorithm Lab</a><a href="#end">Summary</a></nav>
+
+<div class="wrap">
+<header class="hero" id="intro">
+  <span class="tag">Interactive project &middot; works offline</span>
+  <h1>Nature-Inspired <span>Data Storage</span> Systems</h1>
+  <p>Nature has been storing and improving information for billions of years. DNA keeps the instructions of every living thing, and evolution keeps finding better answers by trial and selection. This page has two small labs where you can try both ideas yourself.</p>
+  <div class="cards3">
+    <div class="card"><h3>1. DNA-Based Storage Systems</h3><p>Type a message, turn it into A, C, G, T letters, damage it with copying errors, and see if it can be recovered.</p></div>
+    <div class="card"><h3>2. Genetic Algorithm and its application</h3><p>Watch a population of "cargo plans" evolve over generations to pack the most valuable load under a weight limit.</p></div>
+    <div class="card"><h3>Why these two together?</h3><p>Both are copied from nature. DNA is how nature <i>stores</i> data. A genetic algorithm is how nature <i>searches</i> for the best choice, like what is best to keep in limited space.</p></div>
+  </div>
+</header>
+
+<!-- ================= DNA ================= -->
+<section id="dna">
+  <h2><small>Part 1</small>DNA-Based Storage Systems</h2>
+  <p class="lead">Normal computers store data as 0s and 1s. DNA uses four letters instead: <b>A, C, G, T</b>. So we can write any file in those four letters, make the DNA in a lab, and read it back later by sequencing.</p>
+  <div class="two">
+    <div class="card"><h3>How it works</h3>
+      <ol class="steps">
+        <li>Convert the message into bits (0 and 1).</li>
+        <li>Cut the bits into pairs. Each pair becomes one base: <span class="mono">00=A 01=C 10=G 11=T</span>.</li>
+        <li>Synthesize DNA with that order of letters.</li>
+        <li>Later, sequence the DNA and convert the letters back to bits and text.</li>
+      </ol></div>
+    <div class="card"><h3>Why people care</h3>
+      <ul>
+        <li><b>Very dense:</b> researchers estimate about 215 petabytes can fit in one gram of DNA (Erlich &amp; Zielinski, 2017).</li>
+        <li><b>Lasts long:</b> DNA kept cool and dry can survive for thousands of years, much longer than hard disks.</li>
+        <li><b>Problems:</b> writing and reading DNA is slow and costly today, and errors happen. That is why we keep extra copies and vote, which you can try below.</li>
+      </ul></div>
+  </div>
+
+  <div class="lab">
+    <h3>🧪 DNA Storage Lab</h3>
+    <label for="msg">1. Your message (keep it short, up to 60 characters)</label>
+    <input type="text" id="msg" maxlength="60" value="Hello DNA!">
+    <div class="row">
+      <div><label>2. Copying error rate: <b id="errv">5%</b> per base</label><input type="range" id="err" min="0" max="30" value="5"></div>
+      <div><label>3. Number of copies made</label>
+        <div class="seg" id="copies"><button data-n="1">1 copy</button><button data-n="3" class="on">3 copies</button><button data-n="5">5 copies</button></div></div>
+    </div>
+    <div class="btns"><button id="redo">🎲 Copy again (new random errors)</button><button class="ghost" id="exp">📈 Run 200 experiments</button></div>
+
+    <div class="lbl"><span>3D view of the DNA double helix (drag to rotate)</span>
+      <span class="seg" id="hsel"><button data-v="orig" class="on">Original</button><button data-v="copy">Copy 1</button><button data-v="cons">Recovered</button></span></div>
+    <canvas id="helix" class="gl"></canvas>
+    <div class="lbl"><span id="hinfo"></span><span class="note">red base = mistake. Slide to move along the strand</span></div>
+    <input type="range" id="hpos" min="0" max="0" value="0">
+    <div class="lbl"><span>Your message as bits</span><span id="bitsn"></span></div>
+    <div class="dna" id="bits" style="color:var(--mut)"></div>
+    <div class="lbl"><span>Stored as DNA (original strand)</span><span id="basen"></span></div>
+    <div class="dna" id="orig"></div>
+    <div class="lbl"><span>After copying: each strand has random mistakes (red = wrong base)</span></div>
+    <div id="strands"></div>
+    <div class="lbl"><span>Recovered strand (majority vote at each position; green outline = mistake fixed by vote)</span></div>
+    <div class="dna" id="cons"></div>
+    <div class="stats">
+      <div class="stat"><b id="s1">0</b><span>mistakes in all copies</span></div>
+      <div class="stat"><b id="s2">0</b><span>mistakes fixed by voting</span></div>
+      <div class="stat"><b id="s3">0</b><span>mistakes left after voting</span></div>
+      <div class="stat"><b id="s4">2</b><span>bits stored per base</span></div>
+    </div>
+    <div class="lbl"><span>Message read back from DNA</span><span id="verdict"></span></div>
+    <div class="out" id="out"></div>
+    <p class="note">Tip: set 1 copy and a high error rate, then watch the message break. Switch to 5 copies and it usually comes back. Real systems use stronger error-correcting codes, but majority voting shows the idea.</p>
+
+    <div id="expbox" style="display:none">
+      <div class="lbl"><span>Chance of perfect recovery for this message (200 tries at each error rate)</span></div>
+      <canvas id="expc" width="900" height="300"></canvas>
+      <div class="legend"><span style="--c:#ff8a65">1 copy</span><span style="--c:#ffd54f">3 copies</span><span style="--c:#b6ff3b">5 copies</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GA ================= -->
+<section id="ga">
+  <h2><small>Part 2</small>Genetic Algorithm and its application</h2>
+  <p class="lead">A genetic algorithm (GA) copies Darwin's idea. Start with many random answers, keep the better ones, mix them, change them a little, and repeat. After many generations the answers get very good.</p>
+  <div class="two">
+    <div class="card"><h3>The steps in nature words</h3>
+      <ol class="steps">
+        <li><b>Population:</b> a group of random answers (each answer is a "chromosome" of 0s and 1s).</li>
+        <li><b>Fitness:</b> give each answer a score. Higher is better.</li>
+        <li><b>Selection:</b> better answers get picked as parents more often.</li>
+        <li><b>Crossover:</b> a child takes part of its genes from each parent.</li>
+        <li><b>Mutation:</b> a few genes flip at random to try new ideas.</li>
+        <li>Repeat for many generations.</li>
+      </ol></div>
+    <div class="card"><h3>Where it is used</h3>
+      <ul>
+        <li><b>Packing and storage:</b> choosing which items or files fit best in limited space (the knapsack problem, which you can try below).</li>
+        <li><b>Timetables and scheduling:</b> exam and shift plans with many rules.</li>
+        <li><b>Routes:</b> delivery and travelling-salesman style problems.</li>
+        <li><b>Engineering design:</b> NASA used an evolved antenna shape on its ST5 spacecraft.</li>
+      </ul>
+      <p class="note">Link to storage: deciding what to keep on a drive with limited space is the same type of problem as loading a truck.</p></div>
+  </div>
+
+  <div class="lab">
+    <h3>🚚 Genetic Algorithm Lab: relief truck loading</h3>
+    <p class="lead" style="margin-top:0">A truck can carry only a limited weight. Each item has a weight and a usefulness score. Find the load with the highest total score. If the truck is overloaded, that plan scores 0.</p>
+    <div class="row">
+      <div><label>Truck weight limit: <b id="capv">80</b> kg</label><input type="range" id="cap" min="30" max="150" value="80"></div>
+      <div><label>Population size: <b id="popv">30</b></label><input type="range" id="pop" min="10" max="100" value="30"></div>
+      <div><label>Mutation rate: <b id="mutv">3%</b> per gene</label><input type="range" id="mut" min="0" max="20" value="3"></div>
+      <div><label>Speed: <b id="spdv">medium</b></label><input type="range" id="spd" min="1" max="5" value="3"></div>
+    </div>
+    <div class="btns"><button id="run">▶ Start evolving</button><button class="ghost" id="step">⏭ One generation</button><button class="ghost" id="fin">⏩ Jump to generation 100</button><button class="ghost" id="reset">↺ New random population</button></div>
+
+    <div class="stats">
+      <div class="stat"><b id="g1">0</b><span>generation</span></div>
+      <div class="stat"><b id="g2">0</b><span>best score so far</span></div>
+      <div class="stat"><b id="g3">0</b><span>best possible score (exact check)</span></div>
+      <div class="stat"><b id="g4">0 / 80</b><span>best load weight (kg)</span></div>
+    </div>
+    <div class="bar"><div id="gbar" style="width:0"></div></div>
+    <div class="lbl"><span>Best plan found: <span id="gverdict"></span></span><span class="note">lime = loaded on the truck</span></div>
+    <div class="items" id="items"></div>
+    <div class="lbl"><span>Its chromosome (1 = take the item)</span></div>
+    <div class="genes" id="genes"></div>
+
+    <div class="lbl"><span>3D view (drag to rotate)</span><span class="note">left: population towers &middot; right: best plan on the truck</span></div>
+    <canvas id="gl3" class="gl"></canvas>
+    <div class="legend"><span style="--c:#b6ff3b">tower = score of one plan</span><span style="--c:#ff5d5d">flat red = overloaded plan (score 0)</span><span style="--c:#93a58b">grey crates = left behind</span></div>
+    <div class="lbl"><span>Score over generations</span></div>
+    <canvas id="gc" width="900" height="280"></canvas>
+    <div class="legend"><span style="--c:#b6ff3b">best in generation</span><span style="--c:#93a58b">average of population</span><span style="--c:#ff8a65">best possible</span></div>
+
+    <div class="lbl"><span>Top 5 plans in the current population</span></div>
+    <table><thead><tr><th>#</th><th>Chromosome</th><th>Weight</th><th>Score</th></tr></thead><tbody id="top"></tbody></table>
+    <p class="note">Try this: set mutation to 0% and see the search get stuck. Then set it to about 3% again. Make the truck limit smaller and run again.</p>
+  </div>
+</section>
+
+<section id="end">
+  <h2><small>Summary</small>What we learned</h2>
+  <div class="cards3">
+    <div class="card"><h3>DNA storage</h3><p>Data can be written in 4 letters, stored very densely, and recovered even after errors if we keep extra copies and check them against each other.</p></div>
+    <div class="card"><h3>Genetic algorithm</h3><p>A simple copy of evolution can solve a hard packing problem without trying every combination.</p></div>
+    <div class="card"><h3>Main idea</h3><p>Nature is a good teacher for storing data and for choosing the best option. These ideas are already used in research and industry.</p></div>
+  </div>
+</section>
+</div>
+<footer><div class="wrap">Nature-Inspired Data Storage Systems &middot; Made by Kanishk Saini &middot; Everything runs in your browser, no internet needed after loading.</div></footer>
+
+<script src="three.min.js"></script>
+<script>if(typeof THREE==="undefined"){document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"><\/script>')}</script>
+<script>
+const $=id=>document.getElementById(id);
+/* ---------- DNA LAB ---------- */
+const BASES='ACGT';
+function toBases(str){const b=new TextEncoder().encode(str);let s='',bits='';for(const x of b){bits+=x.toString(2).padStart(8,'0')+' ';for(let k=6;k>=0;k-=2)s+=BASES[(x>>k)&3];}return{bases:s,bits:bits.trim(),n:b.length}}
+function fromBases(s){const a=[];for(let i=0;i+3<s.length;i+=4){let v=0;for(let k=0;k<4;k++)v=v*4+BASES.indexOf(s[i+k]);a.push(v);}return new TextDecoder('utf-8').decode(new Uint8Array(a))}
+function mutate(s,p){let r='',c=0;const flags=[];for(const ch of s){if(Math.random()<p){let n;do{n=BASES[Math.random()*4|0]}while(n===ch);r+=n;c++;flags.push(1)}else{r+=ch;flags.push(0)}}return{s:r,c,flags}}
+function vote(strands){const L=strands[0].length;let r='';for(let i=0;i<L;i++){const cnt={A:0,C:0,G:0,T:0};for(const s of strands)cnt[s[i]]++;let best=strands[0][i],bc=-1;for(const k of BASES){if(cnt[k]>bc){bc=cnt[k];best=k}}r+=best}return r}
+function spans(s,flags,fix){let h='';for(let i=0;i<s.length;i++){if(i&&i%4===0)h+='<u></u>';h+=`<i class="${s[i]}${flags&&flags[i]?' bad':''}${fix&&fix[i]?' fix':''}">${s[i]}</i>`}return h}
+function esc(t){return t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+let nCopies=3,copyData=null,dnaView=null;
+function dnaEncode(){const t=toBases($('msg').value);$('bits').textContent=t.bits||'(type something)';$('bitsn').textContent=t.n*8+' bits';$('orig').innerHTML=spans(t.bases);$('basen').textContent=t.bases.length+' bases, '+t.n+' bytes';return t}
+function dnaRun(){
+  const t=dnaEncode(),p=$('err').value/100;$('errv').textContent=$('err').value+'%';
+  if(!t.bases){$('strands').innerHTML='';$('cons').innerHTML='';$('out').textContent='';$('verdict').innerHTML='';['s1','s2','s3'].forEach(i=>$(i).textContent=0);return}
+  const cps=[];let total=0;for(let i=0;i<nCopies;i++){const m=mutate(t.bases,p);cps.push(m);total+=m.c}
+  $('strands').innerHTML=cps.map((m,i)=>`<div class="lbl" style="margin:8px 0 3px"><span>Copy ${i+1}</span><span>${m.c} mistake${m.c==1?'':'s'}</span></div><div class="dna" style="max-height:110px">${spans(m.s,m.flags)}</div>`).join('');
+  const cons=vote(cps.map(m=>m.s));
+  const fix=[],wrongAfter=[];let left=0;
+  for(let i=0;i<cons.length;i++){const anyBad=cps.some(m=>m.flags[i]);const bad=cons[i]!==t.bases[i];if(bad)left++;fix.push(anyBad&&!bad?1:0);wrongAfter.push(bad?1:0)}
+  $('cons').innerHTML=spans(cons,wrongAfter,fix);
+  $('s1').textContent=total;$('s3').textContent=left;
+  let fixedCount=0;for(let i=0;i<cons.length;i++){let errsHere=0;cps.forEach(m=>errsHere+=m.flags[i]);if(errsHere&&cons[i]===t.bases[i])fixedCount+=errsHere}
+  $('s2').textContent=nCopies===1?0:fixedCount;
+  const back=fromBases(cons),same=back===$('msg').value;
+  $('out').textContent=back;
+  dnaView={orig:t.bases,copy:cps[0].s,cons:cons,copyFlags:cps[0].flags,consFlags:wrongAfter};if(window.updateHelix)updateHelix();
+  $('verdict').innerHTML=same?'<span class="badge ok">✔ Recovered perfectly</span>':'<span class="badge no">✘ Message damaged ('+left+' wrong base'+(left==1?'':'s')+')</span>';
+}
+$('msg').oninput=dnaRun;$('err').oninput=dnaRun;$('redo').onclick=dnaRun;
+document.querySelectorAll('#copies button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#copies button').forEach(x=>x.classList.remove('on'));b.classList.add('on');nCopies=+b.dataset.n;dnaRun()});
+$('exp').onclick=()=>{
+  const t=toBases($('msg').value);if(!t.bases)return;$('expbox').style.display='block';
+  const cv=$('expc'),x=cv.getContext('2d'),W=cv.width,H=cv.height,pad=44;x.clearRect(0,0,W,H);
+  const pts=[];for(let e=0;e<=20;e++)pts.push(e);
+  const series=[[1,'#ff8a65'],[3,'#ffd54f'],[5,'#b6ff3b']];
+  x.strokeStyle='#26331f';x.fillStyle='#93a58b';x.font='12px sans-serif';x.lineWidth=1;
+  for(let k=0;k<=4;k++){const y=H-pad-(H-2*pad)*k/4;x.beginPath();x.moveTo(pad,y);x.lineTo(W-14,y);x.stroke();x.fillText(k*25+'%',6,y+4)}
+  pts.forEach(e=>{if(e%5==0){const px=pad+(W-pad-14)*e/20;x.fillText(e+'%',px-8,H-pad+18)}});
+  x.fillText('error rate per base',W/2-50,H-6);
+  for(const [n,col] of series){x.strokeStyle=col;x.lineWidth=3;x.beginPath();
+    pts.forEach((e,i)=>{let ok=0;for(let r=0;r<200;r++){const cs=[];for(let c=0;c<n;c++)cs.push(mutate(t.bases,e/100).s);if(vote(cs)===t.bases)ok++}
+      const px=pad+(W-pad-14)*e/20,py=H-pad-(H-2*pad)*(ok/200);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}
+};
+document.querySelector('#copies').addEventListener('click',()=>{});
+dnaRun();
+
+/* ---------- GA LAB ---------- */
+const ITEMS=[['Medicine kit',4,90,'💊'],['Water cans',20,60,'💧'],['Food packs',15,70,'🍚'],['Blankets',10,40,'🛏️'],['Generator',30,100,'⚡'],['Tents',25,80,'⛺'],['Radio set',3,50,'📻'],['Torches',2,25,'🔦'],['Tool box',12,45,'🧰'],['Fuel can',18,55,'⛽'],['Ropes',6,20,'🪢'],['Baby food',5,65,'🍼'],['Laptop',4,35,'💻'],['Solar panel',14,60,'☀️'],['First-aid books',2,10,'📕']];
+const N=ITEMS.length;
+let cap=80,popSize=30,mutRate=.03,pop=[],gen=0,hist=[],bestEver=null,timer=null,optimal=0;
+const SPEEDS=[null,900,450,200,80,25],SPNAME=['','very slow','slow','medium','fast','very fast'];
+function wt(c){let w=0;for(let i=0;i<N;i++)if(c[i])w+=ITEMS[i][1];return w}
+function val(c){let v=0;for(let i=0;i<N;i++)if(c[i])v+=ITEMS[i][2];return v}
+function fit(c){return wt(c)<=cap?val(c):0}
+function exact(){const d=new Array(cap+1).fill(0);for(const it of ITEMS){for(let w=cap;w>=it[1];w--)d[w]=Math.max(d[w],d[w-it[1]]+it[2])}return d[cap]}
+function rnd(){return Array.from({length:N},()=>Math.random()<.35?1:0)}
+function reset(){stop();cap=+$('cap').value;popSize=+$('pop').value;mutRate=$('mut').value/100;gen=0;hist=[];pop=Array.from({length:popSize},rnd);optimal=exact();bestEver=null;record();draw()}
+function record(){let best=pop[0],sum=0;for(const c of pop){sum+=fit(c);if(fit(c)>fit(best))best=c}
+  if(!bestEver||fit(best)>fit(bestEver))bestEver=best.slice();
+  hist.push({best:fit(best),avg:sum/pop.length})}
+function tourney(){let a=pop[Math.random()*pop.length|0],b=pop[Math.random()*pop.length|0],c=pop[Math.random()*pop.length|0];let r=a;if(fit(b)>fit(r))r=b;if(fit(c)>fit(r))r=c;return r}
+function nextGen(){
+  const sorted=pop.slice().sort((a,b)=>fit(b)-fit(a));const nx=[sorted[0].slice(),sorted[1]?sorted[1].slice():sorted[0].slice()];
+  while(nx.length<popSize){const p1=tourney(),p2=tourney(),cut=1+Math.random()*(N-1)|0;
+    const ch=[];for(let i=0;i<N;i++){let g=i<cut?p1[i]:p2[i];if(Math.random()<mutRate)g=1-g;ch.push(g)}nx.push(ch)}
+  pop=nx;gen++;record()}
+function draw(){
+  const b=bestEver,bf=fit(b),w=wt(b);
+  $('capv').textContent=$('cap').value;$('popv').textContent=$('pop').value;$('mutv').textContent=$('mut').value+'%';$('spdv').textContent=SPNAME[$('spd').value];
+  $('g1').textContent=gen;$('g2').textContent=bf;$('g3').textContent=optimal;$('g4').textContent=w+' / '+cap;
+  $('gbar').style.width=Math.min(100,bf/optimal*100)+'%';
+  $('gverdict').innerHTML=bf===optimal?'<span class="badge ok">✔ Best possible load found</span>':bf===0?'<span class="badge no">no valid plan yet</span>':'<span class="badge no" style="background:#ffd54f22;color:#ffd54f">'+Math.round(bf/optimal*100)+'% of the best possible</span>';
+  $('items').innerHTML=ITEMS.map((it,i)=>`<div class="it ${b[i]?'on':''}"><b>${it[3]} ${it[0]}</b><span>${it[1]} kg &middot; score ${it[2]}</span></div>`).join('');
+  $('genes').innerHTML=b.map(g=>`<i class="${g?'on':''}">${g}</i>`).join('');
+  const top=pop.slice().sort((a,b)=>fit(b)-fit(a)).slice(0,5);
+  $('top').innerHTML=top.map((c,i)=>`<tr><td>${i+1}</td><td class="mono">${c.join('')}</td><td>${wt(c)} kg${wt(c)>cap?' <span style="color:var(--red)">(too heavy)</span>':''}</td><td>${fit(c)}</td></tr>`).join('');
+  chart();if(window.updateGA3D)updateGA3D();
+}
+function chart(){
+  const cv=$('gc'),x=cv.getContext('2d'),W=cv.width,H=cv.height,pad=44;x.clearRect(0,0,W,H);
+  const maxG=Math.max(100,hist.length-1),maxV=Math.max(optimal*1.1,10);
+  x.strokeStyle='#26331f';x.fillStyle='#93a58b';x.font='12px sans-serif';x.lineWidth=1;
+  for(let k=0;k<=4;k++){const y=H-pad-(H-2*pad)*k/4;x.beginPath();x.moveTo(pad,y);x.lineTo(W-14,y);x.stroke();x.fillText(Math.round(maxV*k/4),6,y+4)}
+  for(let g=0;g<=maxG;g+=20){const px=pad+(W-pad-14)*g/maxG;x.fillText(g,px-6,H-pad+18)}
+  x.fillText('generation',W/2-25,H-6);
+  const X=i=>pad+(W-pad-14)*i/maxG,Y=v=>H-pad-(H-2*pad)*v/maxV;
+  x.setLineDash([6,5]);x.strokeStyle='#ff8a65';x.lineWidth=2;x.beginPath();x.moveTo(pad,Y(optimal));x.lineTo(W-14,Y(optimal));x.stroke();x.setLineDash([]);
+  for(const [k,col] of [['avg','#93a58b'],['best','#b6ff3b']]){x.strokeStyle=col;x.lineWidth=k==='best'?3:2;x.beginPath();hist.forEach((h,i)=>{i?x.lineTo(X(i),Y(h[k])):x.moveTo(X(i),Y(h[k]))});x.stroke()}
+}
+function stop(){if(timer){clearInterval(timer);timer=null}$('run').textContent='▶ Start evolving'}
+function start(){if(timer)return;$('run').textContent='⏸ Pause';timer=setInterval(()=>{if(gen>=100){stop();return}nextGen();draw()},SPEEDS[$('spd').value])}
+$('run').onclick=()=>{if(timer)stop();else{if(gen>=100)reset();start()}};
+$('step').onclick=()=>{stop();nextGen();draw()};
+$('fin').onclick=()=>{stop();while(gen<100)nextGen();draw()};
+$('reset').onclick=reset;
+['cap','pop'].forEach(i=>$(i).onchange=reset);
+$('cap').oninput=()=>$('capv').textContent=$('cap').value;$('pop').oninput=()=>$('popv').textContent=$('pop').value;
+$('mut').oninput=()=>{mutRate=$('mut').value/100;$('mutv').textContent=$('mut').value+'%'};
+$('spd').oninput=()=>{$('spdv').textContent=SPNAME[$('spd').value];if(timer){stop();start()}};
+reset();
+
+/* ---------- 3D (Three.js) ---------- */
+(function(){
+if(typeof THREE==='undefined'){document.querySelectorAll('canvas.gl').forEach(c=>c.style.display='none');return}
+const live=[];
+function mk(canvas,fov,bg){const r=new THREE.WebGLRenderer({canvas,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.setClearColor(bg||0x0a0f09,1);
+  const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(fov,2,.1,200);
+  s.add(new THREE.AmbientLight(0xffffff,.7));const d=new THREE.DirectionalLight(0xffffff,.9);d.position.set(5,10,8);s.add(d);
+  const o={r,s,c,canvas,visible:true,yaw:0,pitch:0,drag:false};
+  new IntersectionObserver(e=>{o.visible=e[0].isIntersecting}).observe(canvas);
+  canvas.addEventListener('pointerdown',e=>{o.drag=true;o.lx=e.clientX;o.ly=e.clientY;canvas.setPointerCapture(e.pointerId)});
+  canvas.addEventListener('pointerup',()=>o.drag=false);
+  canvas.addEventListener('pointermove',e=>{if(!o.drag)return;o.yaw+=(e.clientX-o.lx)*.01;o.pitch=Math.max(-.8,Math.min(.8,o.pitch+(e.clientY-o.ly)*.006));o.lx=e.clientX;o.ly=e.clientY});
+  live.push(o);return o}
+function fit(o){const w=o.canvas.clientWidth,h=o.canvas.clientHeight;if(o.w!==w||o.h!==h){o.w=w;o.h=h;o.r.setSize(w,h,false);o.c.aspect=w/h;o.c.updateProjectionMatrix()}}
+const COL={A:0x4fc3f7,C:0xffd54f,G:0xb6ff3b,T:0xff8a65},CMP={A:'T',T:'A',C:'G',G:'C'},RED=0xff3b3b;
+const mat={};function M(c,e){const k=c+'_'+(e||0);return mat[k]||(mat[k]=new THREE.MeshStandardMaterial({color:c,roughness:.4,metalness:.1,emissive:e||0}))}
+/* --- helix --- */
+const H=mk($("helix"),38);H.c.position.set(0,0,10.5);H.c.lookAt(0,0,0);
+const axis=new THREE.Group(),spin=new THREE.Group();axis.rotation.z=Math.PI/2;axis.add(spin);H.s.add(axis);
+const WIN=56,SG=new THREE.SphereGeometry(1,14,10),CG=new THREE.CylinderGeometry(1,1,1,10);
+let hview='orig';
+function cyl(parent,m,x0,x1,r){const c=new THREE.Mesh(CG,m);c.rotation.z=Math.PI/2;c.scale.set(r,Math.abs(x1-x0),r);c.position.x=(x0+x1)/2;parent.add(c)}
+window.updateHelix=function(){
+  if(!dnaView)return;const seq=dnaView[hview],bad=hview==='copy'?dnaView.copyFlags:hview==='cons'?dnaView.consFlags:null;
+  const n=seq.length,mx=Math.max(0,n-WIN);$('hpos').max=mx;let st=Math.min(+$('hpos').value,mx);
+  while(spin.children.length){const g=spin.children.pop();}
+  const p1=[],p2=[];const len=Math.min(WIN,n);
+  for(let k=0;k<len;k++){const i=st+k,b=seq[i],q=CMP[b],isBad=bad&&bad[i];
+    const g=new THREE.Group();g.position.y=(k-len/2)*.3;g.rotation.y=k*.6;
+    const c1=isBad?RED:COL[b],c2=isBad?RED:COL[q];
+    cyl(g,M(c1),-1.1,0,.09);cyl(g,M(c2),0,1.1,.09);
+    for(const [x,c] of [[-1.1,c1],[1.1,c2]]){const s=new THREE.Mesh(SG,M(c,isBad?0x550000:0));s.scale.setScalar(isBad?.26:.18);s.position.x=x;g.add(s)}
+    spin.add(g);
+    const a=k*.6;p1.push(new THREE.Vector3(-1.1*Math.cos(a),(k-len/2)*.3,1.1*Math.sin(a)));p2.push(new THREE.Vector3(1.1*Math.cos(a),(k-len/2)*.3,-1.1*Math.sin(a)));
+  }
+  for(const p of [p1,p2]){const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(p),new THREE.LineBasicMaterial({color:0x93a58b}));spin.add(l)}
+  const nb=bad?bad.slice(st,st+len).reduce((a,b)=>a+b,0):0;
+  $('hinfo').textContent='Bases '+(st+1)+' to '+(st+len)+' of '+n+(bad?' ('+nb+' wrong in this window)':'');
+};
+$('hpos').oninput=updateHelix;
+document.querySelectorAll('#hsel button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#hsel button').forEach(x=>x.classList.remove('on'));b.classList.add('on');hview=b.dataset.v;updateHelix()});
+/* --- GA scene --- */
+const G=mk($('gl3'),42);G.c.position.set(0,8,15);G.c.lookAt(0,1,0);
+const root=new THREE.Group();G.s.add(root);
+const grid=new THREE.GridHelper(30,30,0x26331f,0x1a2415);grid.position.y=0;root.add(grid);
+const towers=[];const BG=new THREE.BoxGeometry(1,1,1);
+for(let i=0;i<100;i++){const m=new THREE.Mesh(BG,new THREE.MeshStandardMaterial({color:0xb6ff3b,roughness:.5}));m.visible=false;m.userData={h:.05};root.add(m);towers.push(m)}
+const TX=5.2;// truck centre x
+const bed=new THREE.Mesh(new THREE.BoxGeometry(4.6,.2,4.6),new THREE.MeshStandardMaterial({color:0x3a4a32}));bed.position.set(TX,.55,0);root.add(bed);
+const rail=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(4.6,1.5,4.6)),new THREE.LineBasicMaterial({color:0xb6ff3b}));rail.position.set(TX,1.2,0);root.add(rail);
+const cab=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.6,4.6),new THREE.MeshStandardMaterial({color:0x7fcf1a}));cab.position.set(TX-3.1,1.0,0);root.add(cab);
+for(const [x,z] of [[-2,2.4],[-2,-2.4],[2,2.4],[2,-2.4],[-3.4,2.4],[-3.4,-2.4]]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.4,.4,.35,16),new THREE.MeshStandardMaterial({color:0x111111}));w.rotation.x=Math.PI/2;w.position.set(TX+x,.4,z);root.add(w)}
+const crates=ITEMS.map((it,i)=>{const s=.3+Math.cbrt(it[1])*.2;const col=new THREE.Color().setHSL(i/ITEMS.length*.9,.65,.55);
+  const m=new THREE.Mesh(new THREE.BoxGeometry(s,s,s),new THREE.MeshStandardMaterial({color:col,roughness:.6,transparent:true}));m.userData={s,tx:0,ty:0,tz:0,col};m.position.set(0,s/2,5);root.add(m);return m});
+window.updateGA3D=function(){
+  if(typeof bestEver==='undefined'||!bestEver)return;
+  const maxF=Math.max(optimal,1),cols=Math.ceil(Math.sqrt(pop.length)),sp=.55;
+  towers.forEach((t,i)=>{if(i>=pop.length){t.visible=false;return}t.visible=true;const f=fit(pop[i]);t.userData.h=f?Math.max(.1,f/maxF*4.5):.06;
+    const ratio=f/maxF;t.material.color.set(f?new THREE.Color().setHSL(.25,.9,.25+.35*ratio):0xff5d5d);
+    t.userData.x=-7.5+(i%cols-cols/2)*sp+.5;t.userData.z=(Math.floor(i/cols)-cols/2)*sp});
+  let slot=0,off=0;
+  crates.forEach((c,i)=>{const u=c.userData,on=bestEver[i];
+    if(on){const col=slot%4,row=Math.floor(slot/4)%4;u.tx=TX+(row-1.5)*1.1;u.tz=(col-1.5)*1.1;u.ty=.65+u.s/2+Math.floor(slot/16)*1.1;slot++;c.material.color.copy(u.col);c.material.opacity=1}
+    else{u.tx=-8+off*.95;u.tz=6.2;u.ty=u.s/2;off++;c.material.color.set(0x6b7a64);c.material.opacity=.55}});
+};
+/* loop */
+let last=performance.now();
+function loop(t){requestAnimationFrame(loop);const dt=Math.min(.05,(t-last)/1000);last=t;
+  for(const o of live){if(!o.visible)continue;fit(o)}
+  if(H.visible){spin.rotation.y+=dt*.8;axis.rotation.x=H.pitch;axis.rotation.y=H.yaw;H.r.render(H.s,H.c)}
+  if(G.visible){root.rotation.y=Math.sin(t/4000)*.25+G.yaw;root.rotation.x=G.pitch*.5;
+    for(const m of towers){if(!m.visible)continue;const u=m.userData;m.scale.set(.4,m.scale.y+(u.h-m.scale.y)*.15,.4);m.position.set(u.x,m.scale.y/2,u.z)}
+    for(const c of crates){const u=c.userData;c.position.x+=(u.tx-c.position.x)*.12;c.position.y+=(u.ty-c.position.y)*.12;c.position.z+=(u.tz-c.position.z)*.12}
+    G.r.render(G.s,G.c)}}
+requestAnimationFrame(loop);
+updateHelix();updateGA3D();
+})();
+</script>
+</body>
+</html>
