@@ -4,112 +4,203 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Nature-Inspired Data Storage Systems | Kanishk Saini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#090d08;--card:#121910;--card2:#172014;--line:#26331f;--lime:#b6ff3b;--lime2:#7fcf1a;--txt:#e8f0e2;--mut:#93a58b;--red:#ff5d5d;--A:#4fc3f7;--C:#ffd54f;--G:#b6ff3b;--T:#ff8a65}
+:root{
+  --bg:#070a06;--bg2:#0b100a;--card:#10170d;--card2:#151f11;--line:#243419;--line2:#32491f;
+  --lime:#b6ff3b;--lime2:#8fe01e;--lime-dim:#b6ff3b22;
+  --txt:#eaf3e3;--mut:#8fa185;--red:#ff5d5d;--amber:#ffd54f;
+  --A:#4fc3f7;--C:#ffd54f;--G:#b6ff3b;--T:#ff8a65;
+  --fd:'Syne',sans-serif;--fb:'Space Grotesk',sans-serif;--fm:'JetBrains Mono',monospace;
+}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(1200px 500px at 70% -10%,#17250f 0,transparent 60%),var(--bg);color:var(--txt);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 var(--fb);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:
+  radial-gradient(1100px 520px at 78% -8%,#1a2b0ecc 0,transparent 62%),
+  radial-gradient(900px 600px at -10% 40%,#0f1c0c99 0,transparent 60%),
+  radial-gradient(800px 500px at 105% 85%,#15230f88 0,transparent 55%),var(--bg)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:
+  linear-gradient(#b6ff3b09 1px,transparent 1px),linear-gradient(90deg,#b6ff3b09 1px,transparent 1px);
+  background-size:44px 44px;mask-image:radial-gradient(900px 700px at 50% 0%,#000 0%,transparent 78%)}
+::selection{background:var(--lime);color:#0c1a05}
 a{color:var(--lime)}
-nav{position:sticky;top:0;z-index:10;display:flex;gap:6px;align-items:center;padding:10px 20px;background:#090d08ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);flex-wrap:wrap}
-nav b{color:var(--lime);margin-right:auto;letter-spacing:.3px}
-nav a{color:var(--txt);text-decoration:none;padding:6px 12px;border-radius:99px;font-size:14px}
-nav a:hover{background:var(--card2);color:var(--lime)}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-.herofull{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+/* ---------- nav ---------- */
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--lime2),var(--lime));z-index:60;box-shadow:0 0 12px var(--lime)}
+nav{position:sticky;top:0;z-index:50;display:flex;gap:4px;align-items:center;padding:12px 22px;
+  background:#070a06d9;backdrop-filter:blur(14px);border-bottom:1px solid var(--line);flex-wrap:wrap}
+nav .brand{display:flex;align-items:center;gap:10px;margin-right:auto;font:700 15px var(--fd);letter-spacing:.4px;color:var(--txt);text-decoration:none}
+nav .brand .dot{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:16px;
+  background:linear-gradient(135deg,#b6ff3b26,#b6ff3b0a);border:1px solid var(--line2);box-shadow:0 0 18px #b6ff3b22}
+nav .links{display:flex;gap:4px;flex-wrap:wrap}
+nav .links a{color:var(--mut);text-decoration:none;padding:7px 14px;border-radius:99px;font-size:13.5px;font-weight:500;transition:.2s;border:1px solid transparent}
+nav .links a:hover,nav .links a.on{color:var(--lime);background:var(--lime-dim);border-color:var(--line2)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+/* ---------- hero ---------- */
+.herofull{position:relative;min-height:96vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
 #hero{position:absolute;inset:0;width:100%;height:100%;display:block}
-.herofull:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#090d08f2 8%,#090d0899 45%,transparent 80%),linear-gradient(0deg,#090d08 0,transparent 25%);pointer-events:none}
+.herofull:after{content:"";position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(90deg,#070a06f5 4%,#070a06a8 42%,transparent 72%),
+  linear-gradient(0deg,var(--bg) 2%,transparent 26%)}
 .herofull .wrap{position:relative;z-index:2;width:100%}
 .herofull a{text-decoration:none}
-.tick{margin-top:26px;color:var(--lime);font-size:15px;min-height:62px;line-height:1.7;text-shadow:0 0 12px #b6ff3b66}
-.tick b{color:var(--txt);font-weight:600}
-.hero{padding:64px 0 36px}
-.hero h1{text-shadow:0 2px 30px #000}
-.tag{display:inline-block;border:1px solid var(--lime2);color:var(--lime);border-radius:99px;padding:3px 12px;font-size:13px;margin-bottom:16px}
-h1{font-size:clamp(30px,5vw,52px);line-height:1.1;margin:0 0 14px}
-h1 span{color:var(--lime)}
-.hero p{max-width:720px;color:var(--mut);font-size:18px}
-.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:24px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
-.card h3{margin:0 0 6px;color:var(--lime);font-size:17px}
-.card p,.card li{color:#c9d6c2;font-size:15px;margin:4px 0}
-section{padding:40px 0;border-top:1px solid var(--line)}
-h2{font-size:30px;margin:0 0 6px}h2 small{display:block;font-size:14px;color:var(--lime);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
-.lead{color:var(--mut);max-width:780px;margin:0 0 18px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:760px){.two{grid-template-columns:1fr}}
-.lab{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--lime2);border-radius:20px;padding:22px;margin-top:22px;box-shadow:0 0 40px #b6ff3b14}
-.lab h3{margin:0 0 12px;font-size:20px}
-label{display:block;font-size:14px;color:var(--mut);margin:12px 0 4px}
-input[type=text],textarea{width:100%;background:#0a0f09;border:1px solid var(--line);color:var(--txt);border-radius:10px;padding:10px 12px;font:inherit}
-input[type=text]:focus{outline:2px solid var(--lime2)}
+.tag{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line2);color:var(--lime);border-radius:99px;
+  padding:5px 14px;font:600 11.5px var(--fm);letter-spacing:1.6px;text-transform:uppercase;background:#b6ff3b0d;margin-bottom:22px}
+.tag:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime);animation:blink 2.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+h1{font:800 clamp(38px,6vw,72px)/1.02 var(--fd);letter-spacing:-.5px;margin:0 0 20px;text-shadow:0 4px 40px #000}
+h1 .grad{background:linear-gradient(92deg,var(--lime) 10%,#e2ffa0 55%,var(--lime) 95%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 26px #b6ff3b3d)}
+.lead{font-size:17.5px;color:#c4d3ba;max-width:56ch}
+.hero .lead{max-width:52ch;color:#b9c9ae}
+.hero{padding:70px 0 44px}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0 8px}
+button,.btn{background:var(--lime);color:#0e1c05;border:0;border-radius:12px;padding:11px 20px;font:600 14.5px var(--fb);
+  cursor:pointer;transition:.18s;box-shadow:0 0 0 #b6ff3b00}
+button:hover,.btn:hover{background:#caff6b;box-shadow:0 0 26px #b6ff3b55;transform:translateY(-1px)}
+button.ghost,.btn.ghost{background:#b6ff3b10;color:var(--lime);border:1px solid var(--line2)}
+button.ghost:hover,.btn.ghost:hover{background:#b6ff3b1d;box-shadow:0 0 18px #b6ff3b2a}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.chip{border:1px solid var(--line);background:#0d130bd0;border-radius:12px;padding:9px 14px;font:600 12.5px var(--fm);color:var(--mut)}
+.chip b{color:var(--lime);font-weight:700}
+.tick{margin-top:24px;font:13.5px/1.8 var(--fm);color:var(--lime);min-height:66px;text-shadow:0 0 14px #b6ff3b55}
+.tick b{color:var(--txt)}
+.scrollhint{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:3;color:var(--mut);font:600 10.5px var(--fm);letter-spacing:2.4px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:7px}
+.scrollhint i{width:1px;height:34px;background:linear-gradient(var(--lime),transparent);animation:drop 1.8s infinite}
+@keyframes drop{0%{transform:scaleY(0);transform-origin:top}45%{transform:scaleY(1);transform-origin:top}55%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+/* ---------- sections ---------- */
+section{padding:76px 0 30px}
+.secno{font:700 12px var(--fm);letter-spacing:3px;color:var(--lime);text-transform:uppercase;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.secno:after{content:"";height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,var(--line2),transparent)}
+h2{font:800 clamp(26px,3.6vw,40px)/1.1 var(--fd);margin:0 0 16px;letter-spacing:-.3px}
+h3{font:700 17px var(--fd);margin:0 0 8px;color:#dff0d2}
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:24px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:22px 0}
+.card{background:linear-gradient(160deg,var(--card2) 0,var(--card) 55%);border:1px solid var(--line);border-radius:18px;padding:20px 22px;
+  transition:.25s;position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,#b6ff3b55,transparent);opacity:0;transition:.25s}
+.card:hover{border-color:var(--line2);transform:translateY(-3px);box-shadow:0 14px 40px #0009,0 0 30px #b6ff3b0d}
+.card:hover:before{opacity:1}
+.card p,.card ul,.card ol{margin:6px 0 0;color:#b7c7ab;font-size:14.5px}
+.card ul,.card ol{padding-left:18px}.card li{margin:5px 0}
+/* reveal */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.vis{opacity:1;transform:none}
+/* ---------- labs ---------- */
+.lab{margin-top:26px;background:linear-gradient(165deg,#111a0e 0,#0c1209 60%);border:1px solid var(--line2);border-radius:22px;
+  padding:24px 26px 26px;box-shadow:0 24px 70px #000a,0 0 60px #b6ff3b08;position:relative;overflow:hidden}
+.lab:before{content:"";position:absolute;top:-70px;right:-70px;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,#b6ff3b14,transparent 65%);pointer-events:none}
+.lab h3{font-size:20px;display:flex;align-items:center;gap:10px}
+label{display:block;font:600 12px var(--fm);letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin:14px 0 6px}
+label b{color:var(--lime)}
+input[type=text]{width:100%;background:#080d06;border:1px solid var(--line2);color:var(--txt);border-radius:12px;
+  padding:12px 14px;font:15px var(--fb);transition:.2s}
+input[type=text]:focus{outline:none;border-color:var(--lime);box-shadow:0 0 0 3px #b6ff3b22,0 0 22px #b6ff3b22}
 input[type=range]{width:100%;accent-color:var(--lime)}
-.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:200px}
-button{background:var(--lime);color:#10200a;border:0;border-radius:10px;padding:9px 16px;font:600 14px inherit;font-family:inherit;cursor:pointer}
-button:hover{background:#cbff66}button.ghost{background:transparent;color:var(--lime);border:1px solid var(--lime2)}button.ghost:hover{background:#b6ff3b1a}
-.btns{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
-.seg{display:flex;gap:6px}.seg button{background:#0a0f09;color:var(--txt);border:1px solid var(--line)}.seg button.on{background:var(--lime);color:#10200a;border-color:var(--lime)}
-.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
-.dna{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;line-height:1.9;word-break:break-all;background:#0a0f09;border:1px solid var(--line);border-radius:10px;padding:10px 12px;max-height:150px;overflow:auto}
-.dna i{font-style:normal;display:inline-block;width:1.15em;text-align:center;border-radius:4px;margin:0 1px}
+.row{display:flex;gap:16px;flex-wrap:wrap}.row>div{flex:1;min-width:190px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{background:#080d06;color:var(--mut);border:1px solid var(--line);box-shadow:none;font-size:13px;padding:8px 14px}
+.seg button.on{background:var(--lime);color:#0e1c05;border-color:var(--lime);box-shadow:0 0 16px #b6ff3b44}
+.mono{font-family:var(--fm)}
+.dna{font:14.5px/2 var(--fm);word-break:break-all;background:#080d06;border:1px solid var(--line);border-radius:12px;
+  padding:11px 13px;max-height:150px;overflow:auto}
+.dna i{font-style:normal;display:inline-block;width:1.18em;text-align:center;border-radius:5px;margin:0 1px;transition:.2s}
 .dna i.A{color:var(--A)}.dna i.C{color:var(--C)}.dna i.G{color:var(--G)}.dna i.T{color:var(--T)}
-.dna i.bad{background:var(--red);color:#fff;font-weight:700}
-.dna i.fix{outline:1.5px solid var(--lime);border-radius:4px}
+.dna i.bad{background:var(--red);color:#fff;font-weight:700;box-shadow:0 0 12px #ff5d5d88}
+.dna i.fix{outline:1.5px solid var(--lime);box-shadow:0 0 10px #b6ff3b55}
 .dna u{display:inline-block;width:.5em;text-decoration:none}
-.lbl{font-size:13px;color:var(--mut);margin:14px 0 4px;display:flex;justify-content:space-between;gap:8px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:14px 0}
-.stat{background:#0a0f09;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.stat b{display:block;font-size:22px;color:var(--lime)}.stat span{font-size:12px;color:var(--mut)}
-.out{font-size:20px;background:#0a0f09;border:1px dashed var(--lime2);border-radius:12px;padding:12px 14px;word-break:break-word;min-height:50px}
-.dmg{background:var(--red);color:#fff;border-radius:4px;padding:0 4px;font-weight:700}
-.out.pop{animation:pop .9s ease}@keyframes pop{0%{box-shadow:0 0 0 0 #b6ff3b;transform:scale(.97)}50%{box-shadow:0 0 30px 6px #b6ff3b99;transform:scale(1.02)}100%{box-shadow:0 0 0 0 #b6ff3b00;transform:scale(1)}}
-.badge{display:inline-block;padding:3px 12px;border-radius:99px;font-size:13px;font-weight:700}
-.ok{background:#b6ff3b26;color:var(--lime)}.no{background:#ff5d5d26;color:var(--red)}
-canvas.gl{height:380px;cursor:grab;touch-action:none}canvas.gl:active{cursor:grabbing}
-canvas{width:100%;background:#0a0f09;border:1px solid var(--line);border-radius:12px;display:block}
-.legend{display:flex;gap:14px;font-size:12px;color:var(--mut);flex-wrap:wrap;margin-top:6px}.legend span:before{content:"";display:inline-block;width:12px;height:3px;margin-right:6px;vertical-align:middle;background:var(--c)}
+.lbl{font:600 12px var(--fm);letter-spacing:.8px;text-transform:uppercase;color:var(--mut);margin:16px 0 6px;
+  display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.lbl .note{text-transform:none;letter-spacing:0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0}
+.stat{background:#080d06;border:1px solid var(--line);border-radius:14px;padding:12px 14px;transition:.25s}
+.stat:hover{border-color:var(--line2)}
+.stat b{display:block;font:700 24px var(--fd);color:var(--lime);text-shadow:0 0 18px #b6ff3b44}
+.stat span{font-size:11.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.6px}
+.out{font:600 21px var(--fm);background:#080d06;border:1px dashed var(--line2);border-radius:14px;padding:14px 16px;
+  word-break:break-word;min-height:56px}
+.dmg{background:var(--red);color:#fff;border-radius:5px;padding:0 5px;font-weight:700;box-shadow:0 0 12px #ff5d5d66}
+.out.pop{animation:pop .9s ease}
+@keyframes pop{0%{box-shadow:0 0 0 0 var(--lime);transform:scale(.97)}50%{box-shadow:0 0 34px 8px #b6ff3b99;transform:scale(1.015)}100%{box-shadow:0 0 0 0 #b6ff3b00;transform:scale(1)}}
+.badge{display:inline-block;padding:4px 13px;border-radius:99px;font:700 12.5px var(--fb)}
+.ok{background:#b6ff3b26;color:var(--lime)}.no{background:#ff5d5d26;color:var(--red)}.mid{background:#ffd54f22;color:var(--amber)}
+canvas.gl{height:400px;cursor:grab;touch-action:none;position:relative}
+canvas.gl:active{cursor:grabbing}
+canvas{width:100%;background:radial-gradient(600px 300px at 50% 20%,#101a0b,#080d06 75%);border:1px solid var(--line2);border-radius:16px;display:block}
+.gl3dwrap{position:relative}
+.gl3dwrap .nogl{position:absolute;inset:0;display:none;place-items:center;color:var(--mut);font-size:14px;text-align:center;padding:20px}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--mut);flex-wrap:wrap;margin-top:8px}
+.legend span:before{content:"";display:inline-block;width:12px;height:3px;margin-right:7px;vertical-align:middle;background:var(--c);box-shadow:0 0 8px var(--c)}
 .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:6px}
-.it{background:#0a0f09;border:1px solid var(--line);border-radius:12px;padding:8px 10px;font-size:13px;transition:.2s}
-.it b{display:block;font-size:14px}.it span{color:var(--mut)}
-.it.on{border-color:var(--lime);background:#b6ff3b17;box-shadow:inset 0 0 0 1px var(--lime)}
+.it{background:#080d06;border:1px solid var(--line);border-radius:12px;padding:9px 11px;font-size:13px;transition:.25s}
+.it b{display:block;font-size:13.5px}.it span{color:var(--mut);font-size:12px}
+.it.on{border-color:var(--lime);background:#b6ff3b14;box-shadow:inset 0 0 0 1px var(--lime),0 0 18px #b6ff3b22}
 .it.on span{color:#cfe8b0}
-.bar{height:14px;background:#0a0f09;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:6px 0}
-.bar div{height:100%;background:linear-gradient(90deg,var(--lime2),var(--lime));transition:width .2s}
-.genes{display:flex;gap:3px;flex-wrap:wrap}.genes i{font-style:normal;width:22px;height:26px;border-radius:5px;display:grid;place-items:center;font:600 12px ui-monospace,monospace;background:#0a0f09;border:1px solid var(--line);color:var(--mut)}
-.genes i.on{background:var(--lime);color:#10200a;border-color:var(--lime)}
-table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--mut);font-weight:500}
+.bar{height:14px;background:#080d06;border:1px solid var(--line);border-radius:99px;overflow:hidden;margin:8px 0}
+.bar div{height:100%;background:linear-gradient(90deg,var(--lime2),var(--lime));transition:width .25s;box-shadow:0 0 14px #b6ff3b66}
+.genes{display:flex;gap:3px;flex-wrap:wrap}
+.genes i{font-style:normal;width:23px;height:28px;border-radius:6px;display:grid;place-items:center;font:600 12px var(--fm);
+  background:#080d06;border:1px solid var(--line);color:#5a6b52}
+.genes i.on{background:var(--lime);color:#0e1c05;border-color:var(--lime);box-shadow:0 0 10px #b6ff3b55}
+table{border-collapse:collapse;width:100%;font-size:14px}
+td,th{padding:7px 11px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--mut);font:600 11px var(--fm);letter-spacing:1px;text-transform:uppercase}
+tr:hover td{background:#b6ff3b08}
 .steps{counter-reset:s;list-style:none;padding:0;margin:8px 0}
-.steps li{counter-increment:s;position:relative;padding:6px 0 6px 38px;color:#c9d6c2}
-.steps li:before{content:counter(s);position:absolute;left:0;top:5px;width:26px;height:26px;border-radius:50%;background:var(--lime);color:#10200a;font-weight:700;display:grid;place-items:center;font-size:13px}
-.note{color:var(--mut);font-size:13px}
-footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);font-size:14px;margin-top:20px}
+.steps li{counter-increment:s;position:relative;padding:7px 0 7px 40px;color:#c9d6c2;font-size:14.5px}
+.steps li:before{content:counter(s);position:absolute;left:0;top:6px;width:27px;height:27px;border-radius:50%;
+  background:linear-gradient(135deg,var(--lime),#8fe01e);color:#0e1c05;font:700 13px var(--fb);display:grid;place-items:center;
+  box-shadow:0 0 14px #b6ff3b44}
+.note{color:var(--mut);font-size:13.5px}
+footer{border-top:1px solid var(--line);padding:34px 0 46px;color:var(--mut);font-size:14px;margin-top:40px}
+footer b{color:var(--txt)}
+footer .fbrand{font:700 15px var(--fd);color:var(--lime);letter-spacing:.4px}
+@media(max-width:640px){.lab{padding:18px 16px}canvas.gl{height:320px}}
 </style>
 </head>
 <body>
-<nav><b>🧬 Nature-Inspired Storage</b><a href="#intro">Intro</a><a href="#dna">DNA Storage Lab</a><a href="#ga">Genetic Algorithm Lab</a><a href="#end">Summary</a></nav>
+<div id="prog"></div>
+<nav>
+  <a class="brand" href="#intro"><span class="dot">🧬</span>NATURE-INSPIRED STORAGE</a>
+  <div class="links"><a href="#intro">Intro</a><a href="#dna">DNA Storage Lab</a><a href="#ga">Genetic Algorithm Lab</a><a href="#end">Summary</a></div>
+</nav>
 
-<div class="herofull" id="intro"><canvas id="hero"></canvas><div class="wrap">
-<header class="hero">
-  <span class="tag">Interactive project &middot; 3D labs</span>
-  <h1>Nature-Inspired <span>Data Storage</span> Systems</h1>
-  <p>Nature has been storing and improving information for billions of years. DNA keeps the instructions of every living thing, and evolution keeps finding better answers by trial and selection. This page has two small labs where you can try both ideas yourself.</p>
-  <div class="cards3">
-    <div class="card"><h3>1. DNA-Based Storage Systems</h3><p>Type a message, turn it into A, C, G, T letters, damage it with copying errors, and see if it can be recovered.</p></div>
-    <div class="card"><h3>2. Genetic Algorithm and its application</h3><p>Watch a population of "cargo plans" evolve over generations to pack the most valuable load under a weight limit.</p></div>
-    <div class="card"><h3>Why these two together?</h3><p>Both are copied from nature. DNA is how nature <i>stores</i> data. A genetic algorithm is how nature <i>searches</i> for the best choice, like what is best to keep in limited space.</p></div>
+<div class="herofull" id="intro">
+  <canvas id="hero"></canvas>
+  <div class="wrap">
+    <header class="hero">
+      <span class="tag">Interactive project &middot; two live 3D labs</span>
+      <h1>Nature-Inspired<br><span class="grad">Data Storage</span> Systems</h1>
+      <p class="lead">Nature has been storing and improving information for billions of years. DNA keeps the instructions of every living thing, and evolution keeps finding better answers by trial and selection. This page turns both ideas into two labs you can play with.</p>
+      <div class="btns">
+        <a href="#dna"><button>🧬 Enter the DNA Lab</button></a>
+        <a href="#ga"><button class="ghost">🚚 Enter the Evolution Lab</button></a>
+      </div>
+      <div class="chips">
+        <span class="chip"><b>215 PB</b> per gram of DNA</span>
+        <span class="chip"><b>4 letters</b> A &middot; C &middot; G &middot; T</span>
+        <span class="chip"><b>3.8 billion yrs</b> of evolution</span>
+      </div>
+      <div class="tick" id="tick"></div>
+    </header>
   </div>
-  <div class="btns" style="margin-top:22px"><a href="#dna"><button>🧬 Try the DNA Lab</button></a><a href="#ga"><button class="ghost">🚚 Try the Genetic Algorithm Lab</button></a></div>
-  <div class="tick mono" id="tick"></div>
-</header></div></div>
+  <div class="scrollhint">scroll<i></i></div>
+</div>
+
 <div class="wrap">
 
 <!-- ================= DNA ================= -->
-<section id="dna">
-  <h2><small>Part 1</small>DNA-Based Storage Systems</h2>
+<section id="dna" class="rv">
+  <div class="secno">Part 01</div>
+  <h2>DNA-Based Storage Systems</h2>
   <p class="lead">Normal computers store data as 0s and 1s. DNA uses four letters instead: <b>A, C, G, T</b>. So we can write any file in those four letters, make the DNA in a lab, and read it back later by sequencing.</p>
   <div class="two">
     <div class="card"><h3>How it works</h3>
       <ol class="steps">
         <li>Convert the message into bits (0 and 1).</li>
-        <li>Cut the bits into pairs. Each pair becomes one base: <span class="mono">00=A 01=C 10=G 11=T</span>.</li>
+        <li>Cut the bits into pairs. Each pair becomes one base: <span class="mono">00=A &nbsp;01=C &nbsp;10=G &nbsp;11=T</span>.</li>
         <li>Synthesize DNA with that order of letters.</li>
         <li>Later, sequence the DNA and convert the letters back to bits and text.</li>
       </ol></div>
@@ -121,7 +212,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
       </ul></div>
   </div>
 
-  <div class="lab">
+  <div class="lab rv">
     <h3>🧪 DNA Storage Lab</h3>
     <label for="msg">1. Your message (keep it short, up to 60 characters)</label>
     <input type="text" id="msg" maxlength="60" value="Hello DNA!">
@@ -132,11 +223,15 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
     </div>
     <div class="btns"><button id="redo">🎲 Copy again (new random errors)</button><button class="ghost" id="exp">📈 Run 200 experiments</button></div>
 
-    <div class="lbl"><span>3D view of the DNA double helix (drag to rotate)</span>
+    <div class="lbl"><span>3D double helix of your message (drag to rotate)</span>
       <span class="seg" id="hsel"><button data-v="orig" class="on">Original</button><button data-v="copy">Copy 1</button><button data-v="cons">Recovered</button></span></div>
-    <canvas id="helix" class="gl"></canvas>
-    <div class="lbl"><span id="hinfo"></span><span class="note">red base = mistake. Slide to move along the strand</span></div>
+    <div class="gl3dwrap"><canvas id="helix" class="gl"></canvas><div class="nogl" id="nogl1">3D needs internet (for the 3D library) and WebGL.<br>The text version below still works.</div></div>
+    <div class="lbl"><span id="hinfo"></span><span class="note">red glow = copying mistake &middot; lime pulse = fixed by vote &middot; slider moves along the strand</span></div>
     <input type="range" id="hpos" min="0" max="0" value="0">
+    <div class="legend">
+      <span style="--c:#4fc3f7">A &middot; Adenine</span><span style="--c:#ffd54f">C &middot; Cytosine</span>
+      <span style="--c:#b6ff3b">G &middot; Guanine</span><span style="--c:#ff8a65">T &middot; Thymine</span>
+    </div>
     <div class="lbl"><span>Your message as bits</span><span id="bitsn"></span></div>
     <div class="dna" id="bits" style="color:var(--mut)"></div>
     <div class="lbl"><span>Stored as DNA (original strand)</span><span id="basen"></span></div>
@@ -153,7 +248,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
     </div>
     <div class="lbl"><span>Message read back from DNA</span><span id="verdict"></span></div>
     <div class="out" id="out"></div>
-    <div id="cap2" class="note" style="margin-top:8px;font-size:14px"></div>
+    <div id="cap2" class="note" style="margin-top:10px;font-size:14px"></div>
     <p class="note">Tip: set 1 copy and a high error rate, then watch the message break. Switch to 5 copies and it usually comes back. Real systems use stronger error-correcting codes, but majority voting shows the idea.</p>
 
     <div id="expbox" style="display:none">
@@ -165,8 +260,9 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
 </section>
 
 <!-- ================= GA ================= -->
-<section id="ga">
-  <h2><small>Part 2</small>Genetic Algorithm and its application</h2>
+<section id="ga" class="rv">
+  <div class="secno">Part 02</div>
+  <h2>Genetic Algorithm and its Application</h2>
   <p class="lead">A genetic algorithm (GA) copies Darwin's idea. Start with many random answers, keep the better ones, mix them, change them a little, and repeat. After many generations the answers get very good.</p>
   <div class="two">
     <div class="card"><h3>The steps in nature words</h3>
@@ -188,9 +284,9 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
       <p class="note">Link to storage: deciding what to keep on a drive with limited space is the same type of problem as loading a truck.</p></div>
   </div>
 
-  <div class="lab">
+  <div class="lab rv">
     <h3>🚚 Genetic Algorithm Lab: relief truck loading</h3>
-    <p class="lead" style="margin-top:0">A truck can carry only a limited weight. Each item has a weight and a usefulness score. Find the load with the highest total score. If the truck is overloaded, that plan scores 0.</p>
+    <p class="lead" style="margin-top:4px">A truck can carry only a limited weight. Each item has a weight and a usefulness score. Find the load with the highest total score. If the truck is overloaded, that plan scores 0.</p>
     <div class="row">
       <div><label>Truck weight limit: <b id="capv">80</b> kg</label><input type="range" id="cap" min="30" max="150" value="80"></div>
       <div><label>Population size: <b id="popv">30</b></label><input type="range" id="pop" min="10" max="100" value="30"></div>
@@ -202,7 +298,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
     <div class="stats">
       <div class="stat"><b id="g1">0</b><span>generation</span></div>
       <div class="stat"><b id="g2">0</b><span>best score so far</span></div>
-      <div class="stat"><b id="g3">0</b><span>best possible score (exact check)</span></div>
+      <div class="stat"><b id="g3">0</b><span>best possible (exact check)</span></div>
       <div class="stat"><b id="g4">0 / 80</b><span>best load weight (kg)</span></div>
     </div>
     <div class="bar"><div id="gbar" style="width:0"></div></div>
@@ -211,9 +307,9 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
     <div class="lbl"><span>Its chromosome (1 = take the item)</span></div>
     <div class="genes" id="genes"></div>
 
-    <div class="lbl"><span>3D view (drag to rotate)</span><span class="note">left: population towers &middot; right: best plan on the truck</span></div>
-    <canvas id="gl3" class="gl"></canvas>
-    <div class="legend"><span style="--c:#b6ff3b">tower = score of one plan</span><span style="--c:#ff5d5d">flat red = overloaded plan (score 0)</span><span style="--c:#93a58b">grey crates = left behind</span></div>
+    <div class="lbl"><span>3D view (drag to rotate)</span><span class="note">left: population towers &middot; right: best plan loaded on the truck</span></div>
+    <div class="gl3dwrap"><canvas id="gl3" class="gl"></canvas><div class="nogl" id="nogl2">3D needs internet (for the 3D library) and WebGL.<br>The charts below still work.</div></div>
+    <div class="legend"><span style="--c:#b6ff3b">tower = score of one plan (glowing = best)</span><span style="--c:#ff5d5d">flat red = overloaded plan (score 0)</span><span style="--c:#93a58b">grey crates = left behind</span></div>
     <div class="lbl"><span>Score over generations</span></div>
     <canvas id="gc" width="900" height="280"></canvas>
     <div class="legend"><span style="--c:#b6ff3b">best in generation</span><span style="--c:#93a58b">average of population</span><span style="--c:#ff8a65">best possible</span></div>
@@ -224,74 +320,259 @@ footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--mut);fon
   </div>
 </section>
 
-<section id="end">
-  <h2><small>Summary</small>What we learned</h2>
+<section id="end" class="rv">
+  <div class="secno">Summary</div>
+  <h2>What we learned</h2>
   <div class="cards3">
-    <div class="card"><h3>DNA storage</h3><p>Data can be written in 4 letters, stored very densely, and recovered even after errors if we keep extra copies and check them against each other.</p></div>
-    <div class="card"><h3>Genetic algorithm</h3><p>A simple copy of evolution can solve a hard packing problem without trying every combination.</p></div>
-    <div class="card"><h3>Main idea</h3><p>Nature is a good teacher for storing data and for choosing the best option. These ideas are already used in research and industry.</p></div>
+    <div class="card"><h3>🧬 DNA storage</h3><p>Data can be written in 4 letters, stored very densely, and recovered even after errors if we keep extra copies and check them against each other.</p></div>
+    <div class="card"><h3>🧮 Genetic algorithm</h3><p>A simple copy of evolution can solve a hard packing problem without trying every combination.</p></div>
+    <div class="card"><h3>🌱 Main idea</h3><p>Nature is a good teacher for storing data and for choosing the best option. These ideas are already used in research and industry.</p></div>
   </div>
 </section>
 </div>
 
+<footer><div class="wrap">
+  <div class="fbrand">🧬 Nature-Inspired Data Storage Systems</div>
+  <p style="margin:10px 0 0">A class project by <b>Kanishk Saini</b> (N099) &middot; Group N090&ndash;N105 &middot; NMIMS, Shirpur<br>
+  <span class="note">DNA-based storage systems &amp; the genetic algorithm, explained with two interactive 3D labs.</span></p>
+</div></footer>
 <script src="three.min.js"></script>
 <script>if(typeof THREE==="undefined"){document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"><\/script>')}</script>
 <script>
 const $=id=>document.getElementById(id);
-/* ---------- DNA LAB ---------- */
+const GL=typeof THREE!=='undefined';
+/* ================= shared 3D helpers ================= */
+const BC={A:0x4fc3f7,C:0xffd54f,G:0xb6ff3b,T:0xff8a65};
+const COMP={A:'T',T:'A',C:'G',G:'C'};
+let _glowTex=null;
+function glowTex(){if(_glowTex)return _glowTex;
+  const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
+  const g=x.createRadialGradient(64,64,0,64,64,64);
+  g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.32,'rgba(255,255,255,.42)');g.addColorStop(1,'rgba(255,255,255,0)');
+  x.fillStyle=g;x.fillRect(0,0,128,128);_glowTex=new THREE.CanvasTexture(c);return _glowTex}
+const _mats={};
+function baseMat(col,ei){const k=col+'_'+(ei||50);
+  if(!_mats[k])_mats[k]=new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:(ei||50)/100,roughness:.32,metalness:.15});
+  return _mats[k]}
+function makeGlow(col,scale,op){const m=new THREE.SpriteMaterial({map:glowTex(),color:col,blending:THREE.AdditiveBlending,transparent:true,opacity:op==null?.4:op,depthWrite:false});
+  const s=new THREE.Sprite(m);s.scale.set(scale,scale,1);return s}
+function barBetween(a,b,r,mat){const d=b.clone().sub(a),len=d.length();
+  const geo=new THREE.CylinderGeometry(r,r,len,8);const m=new THREE.Mesh(geo,mat);
+  m.position.copy(a).add(b).multiplyScalar(.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m}
+const _sphGeo={};
+function sphGeo(r){const k='s'+r;if(!_sphGeo[k])_sphGeo[k]=new THREE.SphereGeometry(r,18,14);return _sphGeo[k]}
+const _tubeMat={};
+function tubeMat(){if(!_tubeMat.m)_tubeMat.m=new THREE.MeshStandardMaterial({color:0x2e4a1a,emissive:0xb6ff3b,emissiveIntensity:.08,roughness:.5,metalness:.15});return _tubeMat.m}
+
+/* Build a DNA double helix. seq: base string. flags[i]: null|'bad'|'fix'. Returns group; caller disposes userData.geo on rebuild. */
+function buildHelix(seq,flags,o){
+  o=Object.assign({radius:1,rise:.32,twist:.628,sphereR:.095,glow:.42},o||{});
+  const g=new THREE.Group();g.userData.geo=[];g.userData.bad=[];g.userData.fix=[];
+  const n=seq.length,y0=-(n-1)*o.rise/2;
+  if(o.backbone!==false){
+    for(const ph of [0,Math.PI]){
+      const pts=[];for(let i=0;i<n;i++){const a=i*o.twist+ph;
+        pts.push(new THREE.Vector3(Math.cos(a)*o.radius,y0+i*o.rise,Math.sin(a)*o.radius))}
+      const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),Math.max(40,n*6),o.sphereR*.45,8,false);
+      g.userData.geo.push(geo);g.add(new THREE.Mesh(geo,tubeMat()));
+    }
+  }
+  for(let i=0;i<n;i++){
+    const a=i*o.twist,y=y0+i*o.rise;
+    const b1=seq[i],b2=COMP[b1]||'A',f=flags?flags[i]:null;
+    const p1=new THREE.Vector3(Math.cos(a)*o.radius,y,Math.sin(a)*o.radius);
+    const c1=new THREE.Vector3(p1.x*.36,y,p1.z*.36);
+    const p2=new THREE.Vector3(Math.cos(a+Math.PI)*o.radius,y,Math.sin(a+Math.PI)*o.radius);
+    const c2=new THREE.Vector3(p2.x*.36,y,p2.z*.36);
+    const col1=f==='bad'?0xff5d5d:BC[b1],col2=BC[b2];
+    const r1=barBetween(p1,c1,o.sphereR*.34,baseMat(col1,35));g.userData.geo.push(r1.geometry);g.add(r1);
+    const r2=barBetween(p2,c2,o.sphereR*.34,baseMat(col2,35));g.userData.geo.push(r2.geometry);g.add(r2);
+    const s1=new THREE.Mesh(sphGeo(o.sphereR),baseMat(col1,f==='bad'?85:60));s1.position.copy(c1);g.add(s1);
+    const s2=new THREE.Mesh(sphGeo(o.sphereR),baseMat(col2,60));s2.position.copy(c2);g.add(s2);
+    const gl1=makeGlow(col1,o.glow,f==='bad'?.55:.34);gl1.position.copy(c1);g.add(gl1);
+    const gl2=makeGlow(col2,o.glow,.3);gl2.position.copy(c2);g.add(gl2);
+    if(f==='bad'){g.userData.bad.push({m:s1,g:gl1})}
+    if(f==='fix'){const gf=makeGlow(0xb6ff3b,o.glow*1.9,.5);gf.position.copy(c1);g.add(gf);g.userData.fix.push({m:s1,g:gf})}
+  }
+  return g}
+function disposeHelix(g){if(!g)return;g.traverse(o=>{if(o.isSprite&&o.material)o.material.dispose()});
+  (g.userData.geo||[]).forEach(x=>x.dispose());if(g.parent)g.parent.remove(g)}
+function makeScene(canvas,noGLEl){
+  let r;try{r=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true})}catch(e){if(noGLEl)noGLEl.style.display='grid';return null}
+  r.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(50,2,.1,120);
+  return{r,s,c}}
+function fit(o){const cv=o.r.domElement,w=cv.clientWidth||600,h=cv.clientHeight||400;
+  if(cv.__w!==w||cv.__h!==h){cv.__w=w;cv.__h=h;o.r.setSize(w,h,false);o.c.aspect=w/h;o.c.updateProjectionMatrix()}}
+function addDrag(canvas,st){let down=false,px=0,py=0;
+  canvas.addEventListener('pointerdown',e=>{down=true;px=e.clientX;py=e.clientY;try{canvas.setPointerCapture(e.pointerId)}catch(_){}});
+  window.addEventListener('pointermove',e=>{if(!down)return;
+    st.rotY+=(e.clientX-px)*.0085;st.rotX+=(e.clientY-py)*.005;
+    st.rotX=Math.max(-.85,Math.min(.85,st.rotX));px=e.clientX;py=e.clientY;st.idle=0});
+  window.addEventListener('pointerup',()=>down=false)}
+/* ================= DNA encode helpers ================= */
 const BASES='ACGT';
-function toBases(str){const b=new TextEncoder().encode(str);let s='',bits='';for(const x of b){bits+=x.toString(2).padStart(8,'0')+' ';for(let k=6;k>=0;k-=2)s+=BASES[(x>>k)&3];}return{bases:s,bits:bits.trim(),n:b.length}}
-function fromBases(s){const a=[];for(let i=0;i+3<s.length;i+=4){let v=0;for(let k=0;k<4;k++)v=v*4+BASES.indexOf(s[i+k]);a.push(v);}return new TextDecoder('utf-8').decode(new Uint8Array(a))}
-function mutate(s,p){let r='',c=0;const flags=[];for(const ch of s){if(Math.random()<p){let n;do{n=BASES[Math.random()*4|0]}while(n===ch);r+=n;c++;flags.push(1)}else{r+=ch;flags.push(0)}}return{s:r,c,flags}}
-function vote(strands){const L=strands[0].length;let r='';for(let i=0;i<L;i++){const cnt={A:0,C:0,G:0,T:0};for(const s of strands)cnt[s[i]]++;let best=strands[0][i],bc=-1;for(const k of BASES){if(cnt[k]>bc){bc=cnt[k];best=k}}r+=best}return r}
-function spans(s,flags,fix){let h='';for(let i=0;i<s.length;i++){if(i&&i%4===0)h+='<u></u>';h+=`<i class="${s[i]}${flags&&flags[i]?' bad':''}${fix&&fix[i]?' fix':''}">${s[i]}</i>`}return h}
+function toBases(str){const b=new TextEncoder().encode(str);let s='',bits='';
+  for(const x of b){bits+=x.toString(2).padStart(8,'0')+' ';for(let k=6;k>=0;k-=2)s+=BASES[(x>>k)&3]}
+  return{bases:s,bits:bits.trim(),n:b.length}}
+function fromBases(s){const a=[];for(let i=0;i+3<s.length;i+=4){let v=0;
+  for(let k=0;k<4;k++)v=v*4+BASES.indexOf(s[i+k]);a.push(v)}
+  return new TextDecoder('utf-8').decode(new Uint8Array(a))}
+function mutate(s,p){let r='',c=0;const flags=[];
+  for(const ch of s){if(Math.random()<p){let n;do{n=BASES[Math.random()*4|0]}while(n===ch);r+=n;c++;flags.push(1)}
+    else{r+=ch;flags.push(0)}}return{s:r,c,flags}}
+function vote(strands){const L=strands[0].length;let r='';
+  for(let i=0;i<L;i++){const cnt={A:0,C:0,G:0,T:0};for(const s of strands)cnt[s[i]]++;
+    let best=strands[0][i],bc=-1;for(const k of BASES){if(cnt[k]>bc){bc=cnt[k];best=k}}r+=best}return r}
+function spans(s,flags,fix){let h='';for(let i=0;i<s.length;i++){if(i&&i%4===0)h+='<u></u>';
+  h+=`<i class="${s[i]}${flags&&flags[i]?' bad':''}${fix&&fix[i]?' fix':''}">${s[i]}</i>`}return h}
 function esc(t){return t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
-let nCopies=3,copyData=null,dnaView=null;
-function dnaEncode(){const t=toBases($('msg').value);$('bits').textContent=t.bits||'(type something)';$('bitsn').textContent=t.n*8+' bits';$('orig').innerHTML=spans(t.bases);$('basen').textContent=t.bases.length+' bases, '+t.n+' bytes';return t}
+/* ================= HERO ================= */
+(function(){
+const words=['DNA','Nature','Evolve','Store','Hello','Life'];let wi=0;
+function tick(){const w=words[wi++%words.length],t=toBases(w);
+  $('tick').innerHTML='<b>"'+w+'"</b> &rarr; '+t.bits+'<br>&rarr; '+spans(t.bases)}
+tick();setInterval(tick,2800);
+if(!GL)return;
+const o=makeScene($('hero'));if(!o)return;
+const{r,s,c}=o;s.fog=new THREE.Fog(0x070a06,8.5,20);
+c.position.set(0,.3,8.6);
+s.add(new THREE.AmbientLight(0xffffff,.62));
+const d1=new THREE.DirectionalLight(0xf4ffe0,.75);d1.position.set(3,5,5);s.add(d1);
+const p1=new THREE.PointLight(0xb6ff3b,1.15,32);p1.position.set(-5,3,-4);s.add(p1);
+const p2=new THREE.PointLight(0x4fc3f7,.5,28);p2.position.set(5,-3,3);s.add(p2);
+/* the hero helix really encodes the project title */
+let seq=toBases('NATURE-INSPIRED DATA STORAGE').bases;
+while(seq.length<96)seq+=seq;seq=seq.slice(0,96);
+const tilt=new THREE.Group(),spin=new THREE.Group();
+tilt.rotation.z=1.03;tilt.rotation.x=-.1;tilt.add(spin);s.add(tilt);
+const hx=buildHelix(seq,null,{radius:1.02,rise:.3,twist:.628,sphereR:.085,glow:.4});
+spin.add(hx);
+/* drifting particles */
+function dust(n,col,size,op){const pos=new Float32Array(n*3);
+  for(let i=0;i<n;i++){pos[i*3]=(Math.random()-.5)*26;pos[i*3+1]=(Math.random()-.5)*17;pos[i*3+2]=(Math.random()-.5)*13-2}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const m=new THREE.PointsMaterial({color:col,size:size,transparent:true,opacity:op,blending:THREE.AdditiveBlending,depthWrite:false});
+  const p=new THREE.Points(g,m);s.add(p);return p}
+const dust1=dust(280,0xb6ff3b,.05,.5),dust2=dust(150,0x9fd8ff,.035,.35);
+let mx=0,my=0,tx=0,ty=0;
+window.addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5)*1.4;ty=(e.clientY/innerHeight-.5)*-.9});
+let t0=performance.now();
+(function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
+  fit(o);spin.rotation.y=t*.32;
+  tilt.position.y=Math.sin(t*.45)*.22;
+  mx+=(tx-mx)*.04;my+=(ty-my)*.04;
+  c.position.x=mx*1.1;c.position.y=.3+my;c.lookAt(0,0,0);
+  dust1.rotation.y=t*.02;dust2.rotation.y=-t*.014;
+  r.render(s,c)})(t0);
+})();
+</script>
+<script>
+/* ================= DNA LAB ================= */
+let nCopies=3,dnaView=null,hview='orig';
+function dnaEncode(){const t=toBases($('msg').value);
+  $('bits').textContent=t.bits||'(type something)';$('bitsn').textContent=t.n*8+' bits';
+  $('orig').innerHTML=spans(t.bases);$('basen').textContent=t.bases.length+' bases, '+t.n+' bytes';return t}
 function dnaRun(){
   const t=dnaEncode(),p=$('err').value/100;$('errv').textContent=$('err').value+'%';
-  if(!t.bases){$('strands').innerHTML='';$('cons').innerHTML='';$('out').textContent='';$('verdict').innerHTML='';['s1','s2','s3'].forEach(i=>$(i).textContent=0);return}
-  const cps=[];let total=0;for(let i=0;i<nCopies;i++){const m=mutate(t.bases,p);cps.push(m);total+=m.c}
-  $('strands').innerHTML=cps.map((m,i)=>`<div class="lbl" style="margin:8px 0 3px"><span>Copy ${i+1}</span><span>${m.c} mistake${m.c==1?'':'s'}</span></div><div class="dna" style="max-height:110px">${spans(m.s,m.flags)}</div>`).join('');
+  if(!t.bases){$('strands').innerHTML='';$('cons').innerHTML='';$('out').textContent='';$('verdict').innerHTML='';
+    ['s1','s2','s3'].forEach(i=>$(i).textContent=0);dnaView=null;updateHelix();return}
+  const cps=[];let total=0;
+  for(let i=0;i<nCopies;i++){const m=mutate(t.bases,p);cps.push(m);total+=m.c}
+  $('strands').innerHTML=cps.map((m,i)=>`<div class="lbl" style="margin:10px 0 4px"><span>Copy ${i+1}</span><span>${m.c} mistake${m.c==1?'':'s'}</span></div><div class="dna" style="max-height:110px">${spans(m.s,m.flags)}</div>`).join('');
   const cons=vote(cps.map(m=>m.s));
   const fix=[],wrongAfter=[];let left=0;
-  for(let i=0;i<cons.length;i++){const anyBad=cps.some(m=>m.flags[i]);const bad=cons[i]!==t.bases[i];if(bad)left++;fix.push(anyBad&&!bad?1:0);wrongAfter.push(bad?1:0)}
+  for(let i=0;i<cons.length;i++){const anyBad=cps.some(m=>m.flags[i]);const bad=cons[i]!==t.bases[i];
+    if(bad)left++;fix.push(anyBad&&!bad?1:0);wrongAfter.push(bad?1:0)}
   $('cons').innerHTML=spans(cons,wrongAfter,fix);
   $('s1').textContent=total;$('s3').textContent=left;
-  let fixedCount=0;for(let i=0;i<cons.length;i++){let errsHere=0;cps.forEach(m=>errsHere+=m.flags[i]);if(errsHere&&cons[i]===t.bases[i])fixedCount+=errsHere}
+  let fixedCount=0;for(let i=0;i<cons.length;i++){let e=0;cps.forEach(m=>e+=m.flags[i]);if(e&&cons[i]===t.bases[i])fixedCount+=e}
   $('s2').textContent=nCopies===1?0:fixedCount;
   const back=fromBases(cons),same=back===$('msg').value;
-  const ob=new TextEncoder().encode($('msg').value),rb=[];for(let i=0;i+3<cons.length;i+=4){let v=0;for(let k=0;k<4;k++)v=v*4+BASES.indexOf(cons[i+k]);rb.push(v)}
-  let pos=0,oh='';for(const chh of $('msg').value){const nb=new TextEncoder().encode(chh).length;let okc=true,got=[];for(let k=0;k<nb;k++){got.push(rb[pos+k]);if(rb[pos+k]!==ob[pos+k])okc=false}pos+=nb;
-    if(okc)oh+=esc(chh)===' '?'&nbsp;':esc(chh);else{let g=new TextDecoder().decode(new Uint8Array(got));if(!/^[\x21-\x7e]$/.test(g))g='?';oh+='<span class="dmg" title="should be: '+esc(chh)+'">'+esc(g)+'</span>'}}
+  const ob=new TextEncoder().encode($('msg').value),rb=[];
+  for(let i=0;i+3<cons.length;i+=4){let v=0;for(let k=0;k<4;k++)v=v*4+BASES.indexOf(cons[i+k]);rb.push(v)}
+  let pos=0,oh='';
+  for(const chh of $('msg').value){const nb=new TextEncoder().encode(chh).length;let okc=true,got=[];
+    for(let k=0;k<nb;k++){got.push(rb[pos+k]);if(rb[pos+k]!==ob[pos+k])okc=false}pos+=nb;
+    if(okc)oh+=esc(chh)===' '?'&nbsp;':esc(chh);
+    else{let g=new TextDecoder().decode(new Uint8Array(got));if(!/^[\x21-\x7e]$/.test(g))g='?';
+      oh+='<span class="dmg" title="should be: '+esc(chh)+'">'+esc(g)+'</span>'}}
   $('out').innerHTML=oh;
-  const cap=$('cap2');if(same)cap.textContent=total?'Voting fixed all '+total+' mistake'+(total==1?'':'s')+'. The message is back.':'No mistakes happened this time.';
+  const cap=$('cap2');
+  if(same)cap.textContent=total?'Voting fixed all '+total+' mistake'+(total==1?'':'s')+'. The message is back.':'No mistakes happened this time.';
   else cap.textContent=nCopies===1?"1 copy can't fix errors, so letters get damaged (shown in red). Try 3 or 5 copies.":'Too many mistakes for '+nCopies+' copies. Try more copies or a lower error rate.';
   cap.style.color=same?'var(--lime)':'var(--red)';
-  if(same&&window.lastOk===false){const o=$('out');o.classList.remove('pop');void o.offsetWidth;o.classList.add('pop')}
+  if(same&&window.lastOk===false){const ou=$('out');ou.classList.remove('pop');void ou.offsetWidth;ou.classList.add('pop')}
   window.lastOk=same;
-  dnaView={orig:t.bases,copy:cps[0].s,cons:cons,copyFlags:cps[0].flags,consFlags:wrongAfter};if(window.updateHelix)updateHelix();
-  $('verdict').innerHTML=same?'<span class="badge ok">✔ Recovered perfectly</span>':'<span class="badge no">✘ Message damaged ('+left+' wrong base'+(left==1?'':'s')+')</span>';
-}
+  dnaView={orig:t.bases,copy:cps[0].s,cons:cons,copyFlags:cps[0].flags,consWrong:wrongAfter,consFix:fix,total:t.bases.length};
+  updateHelix();
+  $('verdict').innerHTML=same?'<span class="badge ok">✔ Recovered perfectly</span>':'<span class="badge no">✘ Message damaged ('+left+' wrong base'+(left==1?'':'s')+')</span>'}
 $('msg').oninput=dnaRun;$('err').oninput=dnaRun;$('redo').onclick=dnaRun;
-document.querySelectorAll('#copies button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#copies button').forEach(x=>x.classList.remove('on'));b.classList.add('on');nCopies=+b.dataset.n;dnaRun()});
+document.querySelectorAll('#copies button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#copies button').forEach(x=>x.classList.remove('on'));b.classList.add('on');nCopies=+b.dataset.n;dnaRun()});
 $('exp').onclick=()=>{
   const t=toBases($('msg').value);if(!t.bases)return;$('expbox').style.display='block';
   const cv=$('expc'),x=cv.getContext('2d'),W=cv.width,H=cv.height,pad=44;x.clearRect(0,0,W,H);
   const pts=[];for(let e=0;e<=20;e++)pts.push(e);
   const series=[[1,'#ff8a65'],[3,'#ffd54f'],[5,'#b6ff3b']];
-  x.strokeStyle='#26331f';x.fillStyle='#93a58b';x.font='12px sans-serif';x.lineWidth=1;
+  x.strokeStyle='#243419';x.fillStyle='#8fa185';x.font='12px JetBrains Mono, monospace';x.lineWidth=1;
   for(let k=0;k<=4;k++){const y=H-pad-(H-2*pad)*k/4;x.beginPath();x.moveTo(pad,y);x.lineTo(W-14,y);x.stroke();x.fillText(k*25+'%',6,y+4)}
-  pts.forEach(e=>{if(e%5==0){const px=pad+(W-pad-14)*e/20;x.fillText(e+'%',px-8,H-pad+18)}});
-  x.fillText('error rate per base',W/2-50,H-6);
-  for(const [n,col] of series){x.strokeStyle=col;x.lineWidth=3;x.beginPath();
-    pts.forEach((e,i)=>{let ok=0;for(let r=0;r<200;r++){const cs=[];for(let c=0;c<n;c++)cs.push(mutate(t.bases,e/100).s);if(vote(cs)===t.bases)ok++}
-      const px=pad+(W-pad-14)*e/20,py=H-pad-(H-2*pad)*(ok/200);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()}
-};
-document.querySelector('#copies').addEventListener('click',()=>{});
+  pts.forEach(e=>{if(e%5===0){const px=pad+(W-pad-14)*e/20;x.fillText(e+'%',px-8,H-pad+20)}});
+  x.fillText('error rate per base',W/2-50,H-8);
+  for(const[n,col]of series){x.strokeStyle=col;x.lineWidth=2.5;x.shadowColor=col;x.shadowBlur=8;x.beginPath();
+    pts.forEach((e,i)=>{let ok=0;for(let rr=0;rr<200;rr++){const cs=[];
+      for(let c=0;c<n;c++)cs.push(mutate(t.bases,e/100).s);if(vote(cs)===t.bases)ok++}
+      const px=pad+(W-pad-14)*e/20,py=H-pad-(H-2*pad)*(ok/200);i?x.lineTo(px,py):x.moveTo(px,py)});
+    x.stroke();x.shadowBlur=0}};
+/* ------- DNA lab 3D helix viewer ------- */
+const HL={el:null,grp:null,st:{rotY:0,rotX:.12,idle:99}};
+const HW=12;
+if(GL){
+  HL.el=makeScene($('helix'),$('nogl1'));
+  if(HL.el){
+    HL.el.s.fog=new THREE.Fog(0x080d06,6,13);
+    HL.el.c.position.set(0,.15,4.62);
+    HL.el.s.add(new THREE.AmbientLight(0xffffff,.66));
+    const d=new THREE.DirectionalLight(0xf4ffe0,.7);d.position.set(3,4,5);HL.el.s.add(d);
+    const p=new THREE.PointLight(0xb6ff3b,.8,20);p.position.set(-4,2,-3);HL.el.s.add(p);
+    const p2=new THREE.PointLight(0x4fc3f7,.35,18);p2.position.set(4,-2,3);HL.el.s.add(p2);
+    HL.tilt=new THREE.Group();HL.tilt.rotation.z=.32;HL.el.s.add(HL.tilt);
+    HL.spin=new THREE.Group();HL.tilt.add(HL.spin);
+    addDrag($('helix'),HL.st);
+    const t0=performance.now();
+    (function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
+      fit(HL.el);
+      HL.st.idle+=1/60;
+      if(HL.st.idle>1.2)HL.st.rotY+=.006;
+      HL.spin.rotation.y=HL.st.rotY;HL.tilt.rotation.x=HL.st.rotX*.5+.08;
+      if(HL.grp){for(const b of HL.grp.userData.bad){const s=1+Math.sin(t*7)*.28;b.m.scale.set(s,s,s);b.g.material.opacity=.4+Math.sin(t*7)*.25}
+        for(const f of HL.grp.userData.fix){f.g.material.opacity=.34+Math.sin(t*3.2)*.22}}
+      HL.el.r.render(HL.el.s,HL.el.c)})(t0);
+  }
+}
+function updateHelix(){
+  const maxPos=dnaView?Math.max(0,dnaView.total-HW):0;
+  $('hpos').max=maxPos;if(+$('hpos').value>maxPos)$('hpos').value=maxPos;
+  if(!GL||!HL.el)return;
+  disposeHelix(HL.grp);HL.grp=null;
+  if(!dnaView){$('hinfo').textContent='type a message above';return}
+  const start=+$('hpos').value;
+  let seq,flags=null;
+  if(hview==='orig'){seq=dnaView.orig}
+  else if(hview==='copy'){seq=dnaView.copy;flags=dnaView.copyFlags.map(f=>f?'bad':null)}
+  else{seq=dnaView.cons;flags=dnaView.consWrong.map((w,i)=>w?'bad':(dnaView.consFix[i]?'fix':null))}
+  seq=seq.slice(start,start+HW);flags=flags?flags.slice(start,start+HW):null;
+  HL.grp=buildHelix(seq,flags,{radius:.86,rise:.36,twist:.628,sphereR:.105,glow:.5});
+  HL.spin.add(HL.grp);
+  $('hinfo').textContent='bases '+(start+1)+' to '+(start+seq.length)+' of '+dnaView.total}
+$('hpos').oninput=updateHelix;
+document.querySelectorAll('#hsel button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#hsel button').forEach(x=>x.classList.remove('on'));b.classList.add('on');hview=b.dataset.v;updateHelix()});
 dnaRun();
-
-/* ---------- GA LAB ---------- */
+</script>
+<script>
+/* ================= GA LAB ================= */
 const ITEMS=[['Medicine kit',4,90,'💊'],['Water cans',20,60,'💧'],['Food packs',15,70,'🍚'],['Blankets',10,40,'🛏️'],['Generator',30,100,'⚡'],['Tents',25,80,'⛺'],['Radio set',3,50,'📻'],['Torches',2,25,'🔦'],['Tool box',12,45,'🧰'],['Fuel can',18,55,'⛽'],['Ropes',6,20,'🪢'],['Baby food',5,65,'🍼'],['Laptop',4,35,'💻'],['Solar panel',14,60,'☀️'],['First-aid books',2,10,'📕']];
 const N=ITEMS.length;
 let cap=80,popSize=30,mutRate=.03,pop=[],gen=0,hist=[],bestEver=null,timer=null,optimal=0;
@@ -301,184 +582,144 @@ function val(c){let v=0;for(let i=0;i<N;i++)if(c[i])v+=ITEMS[i][2];return v}
 function fit(c){return wt(c)<=cap?val(c):0}
 function exact(){const d=new Array(cap+1).fill(0);for(const it of ITEMS){for(let w=cap;w>=it[1];w--)d[w]=Math.max(d[w],d[w-it[1]]+it[2])}return d[cap]}
 function rnd(){return Array.from({length:N},()=>Math.random()<.35?1:0)}
-function reset(){stop();cap=+$('cap').value;popSize=+$('pop').value;mutRate=$('mut').value/100;gen=0;hist=[];pop=Array.from({length:popSize},rnd);optimal=exact();bestEver=null;record();draw()}
+function reset(){stop();cap=+$('cap').value;popSize=+$('pop').value;mutRate=$('mut').value/100;
+  gen=0;hist=[];pop=Array.from({length:popSize},rnd);optimal=exact();bestEver=null;record();draw()}
 function record(){let best=pop[0],sum=0;for(const c of pop){sum+=fit(c);if(fit(c)>fit(best))best=c}
   if(!bestEver||fit(best)>fit(bestEver))bestEver=best.slice();
   hist.push({best:fit(best),avg:sum/pop.length})}
-function tourney(){let a=pop[Math.random()*pop.length|0],b=pop[Math.random()*pop.length|0],c=pop[Math.random()*pop.length|0];let r=a;if(fit(b)>fit(r))r=b;if(fit(c)>fit(r))r=c;return r}
+function tourney(){let a=pop[Math.random()*pop.length|0],b=pop[Math.random()*pop.length|0],c=pop[Math.random()*pop.length|0];
+  let r=a;if(fit(b)>fit(r))r=b;if(fit(c)>fit(r))r=c;return r}
 function nextGen(){
-  const sorted=pop.slice().sort((a,b)=>fit(b)-fit(a));const nx=[sorted[0].slice(),sorted[1]?sorted[1].slice():sorted[0].slice()];
+  const sorted=pop.slice().sort((a,b)=>fit(b)-fit(a));
+  const nx=[sorted[0].slice(),sorted[1]?sorted[1].slice():sorted[0].slice()];
   while(nx.length<popSize){const p1=tourney(),p2=tourney(),cut=1+Math.random()*(N-1)|0;
     const ch=[];for(let i=0;i<N;i++){let g=i<cut?p1[i]:p2[i];if(Math.random()<mutRate)g=1-g;ch.push(g)}nx.push(ch)}
   pop=nx;gen++;record()}
 function draw(){
   const b=bestEver,bf=fit(b),w=wt(b);
-  $('capv').textContent=$('cap').value;$('popv').textContent=$('pop').value;$('mutv').textContent=$('mut').value+'%';$('spdv').textContent=SPNAME[$('spd').value];
+  $('capv').textContent=$('cap').value;$('popv').textContent=$('pop').value;
+  $('mutv').textContent=$('mut').value+'%';$('spdv').textContent=SPNAME[$('spd').value];
   $('g1').textContent=gen;$('g2').textContent=bf;$('g3').textContent=optimal;$('g4').textContent=w+' / '+cap;
-  $('gbar').style.width=Math.min(100,bf/optimal*100)+'%';
-  $('gverdict').innerHTML=bf===optimal?'<span class="badge ok">✔ Best possible load found</span>':bf===0?'<span class="badge no">no valid plan yet</span>':'<span class="badge no" style="background:#ffd54f22;color:#ffd54f">'+Math.round(bf/optimal*100)+'% of the best possible</span>';
+  $('gbar').style.width=Math.min(100,bf/(optimal||1)*100)+'%';
+  $('gverdict').innerHTML=bf===optimal?'<span class="badge ok">✔ Best possible load found</span>':bf===0?'<span class="badge no">no valid plan yet</span>':'<span class="badge mid">'+Math.round(bf/optimal*100)+'% of the best possible</span>';
   $('items').innerHTML=ITEMS.map((it,i)=>`<div class="it ${b[i]?'on':''}"><b>${it[3]} ${it[0]}</b><span>${it[1]} kg &middot; score ${it[2]}</span></div>`).join('');
   $('genes').innerHTML=b.map(g=>`<i class="${g?'on':''}">${g}</i>`).join('');
   const top=pop.slice().sort((a,b)=>fit(b)-fit(a)).slice(0,5);
   $('top').innerHTML=top.map((c,i)=>`<tr><td>${i+1}</td><td class="mono">${c.join('')}</td><td>${wt(c)} kg${wt(c)>cap?' <span style="color:var(--red)">(too heavy)</span>':''}</td><td>${fit(c)}</td></tr>`).join('');
-  chart();if(window.updateGA3D)updateGA3D();
-}
+  chart();updateGA3D()}
 function chart(){
   const cv=$('gc'),x=cv.getContext('2d'),W=cv.width,H=cv.height,pad=44;x.clearRect(0,0,W,H);
   const maxG=Math.max(100,hist.length-1),maxV=Math.max(optimal*1.1,10);
-  x.strokeStyle='#26331f';x.fillStyle='#93a58b';x.font='12px sans-serif';x.lineWidth=1;
+  x.strokeStyle='#243419';x.fillStyle='#8fa185';x.font='12px JetBrains Mono, monospace';x.lineWidth=1;
   for(let k=0;k<=4;k++){const y=H-pad-(H-2*pad)*k/4;x.beginPath();x.moveTo(pad,y);x.lineTo(W-14,y);x.stroke();x.fillText(Math.round(maxV*k/4),6,y+4)}
-  for(let g=0;g<=maxG;g+=20){const px=pad+(W-pad-14)*g/maxG;x.fillText(g,px-6,H-pad+18)}
-  x.fillText('generation',W/2-25,H-6);
+  for(let g=0;g<=maxG;g+=20){const px=pad+(W-pad-14)*g/maxG;x.fillText(g,px-6,H-pad+20)}
+  x.fillText('generation',W/2-28,H-8);
   const X=i=>pad+(W-pad-14)*i/maxG,Y=v=>H-pad-(H-2*pad)*v/maxV;
   x.setLineDash([6,5]);x.strokeStyle='#ff8a65';x.lineWidth=2;x.beginPath();x.moveTo(pad,Y(optimal));x.lineTo(W-14,Y(optimal));x.stroke();x.setLineDash([]);
-  for(const [k,col] of [['avg','#93a58b'],['best','#b6ff3b']]){x.strokeStyle=col;x.lineWidth=k==='best'?3:2;x.beginPath();hist.forEach((h,i)=>{i?x.lineTo(X(i),Y(h[k])):x.moveTo(X(i),Y(h[k]))});x.stroke()}
-}
+  for(const[k,col]of[['avg','#8fa185'],['best','#b6ff3b']]){x.strokeStyle=col;x.lineWidth=k==='best'?3:2;
+    if(k==='best'){x.shadowColor=col;x.shadowBlur=8}
+    x.beginPath();hist.forEach((h,i)=>{i?x.lineTo(X(i),Y(h[k])):x.moveTo(X(i),Y(h[k]))});x.stroke();x.shadowBlur=0}}
 function stop(){if(timer){clearInterval(timer);timer=null}$('run').textContent='▶ Start evolving'}
-function start(){if(timer)return;$('run').textContent='⏸ Pause';timer=setInterval(()=>{if(gen>=100){stop();return}nextGen();draw()},SPEEDS[$('spd').value])}
+function start(){if(timer)return;$('run').textContent='⏸ Pause';
+  timer=setInterval(()=>{if(gen>=100){stop();return}nextGen();draw()},SPEEDS[$('spd').value])}
 $('run').onclick=()=>{if(timer)stop();else{if(gen>=100)reset();start()}};
 $('step').onclick=()=>{stop();nextGen();draw()};
 $('fin').onclick=()=>{stop();while(gen<100)nextGen();draw()};
 $('reset').onclick=reset;
 ['cap','pop'].forEach(i=>$(i).onchange=reset);
-$('cap').oninput=()=>$('capv').textContent=$('cap').value;$('pop').oninput=()=>$('popv').textContent=$('pop').value;
+$('cap').oninput=()=>$('capv').textContent=$('cap').value;
+$('pop').oninput=()=>$('popv').textContent=$('pop').value;
 $('mut').oninput=()=>{mutRate=$('mut').value/100;$('mutv').textContent=$('mut').value+'%'};
 $('spd').oninput=()=>{$('spdv').textContent=SPNAME[$('spd').value];if(timer){stop();start()}};
+/* ------- GA 3D ------- */
+const G3={el:null,st:{rotY:0,rotX:0,idle:99},towers:null,crates:null,last:0,bestGlow:null};
+const RAMP=[];
+if(GL){
+  for(let i=0;i<=10;i++){const t=i/10;
+    RAMP.push(new THREE.MeshStandardMaterial({color:new THREE.Color().lerpColors(new THREE.Color(0x243616),new THREE.Color(0xb6ff3b),t),emissive:0xb6ff3b,emissiveIntensity:.04+t*.32,roughness:.45,metalness:.1}))}
+  G3.el=makeScene($('gl3'),$('nogl2'));
+  if(G3.el){
+    const{r,s,c}=G3.el;s.fog=new THREE.Fog(0x080d06,11,26);
+    c.position.set(.4,4.4,10.6);c.lookAt(.4,1.05,0);
+    s.add(new THREE.AmbientLight(0xffffff,.6));
+    const d=new THREE.DirectionalLight(0xf4ffe0,.8);d.position.set(4,8,6);s.add(d);
+    const p=new THREE.PointLight(0xb6ff3b,.9,26);p.position.set(-4,4,-3);s.add(p);
+    G3.root=new THREE.Group();s.add(G3.root);
+    const ground=new THREE.Mesh(new THREE.CircleGeometry(11,48),new THREE.MeshStandardMaterial({color:0x0a1008,roughness:.9}));
+    ground.rotation.x=-Math.PI/2;G3.root.add(ground);
+    const grid=new THREE.GridHelper(22,22,0x2e4a1a,0x15210e);grid.position.y=.01;G3.root.add(grid);
+    /* --- truck (built once) --- */
+    const truck=new THREE.Group();truck.position.set(4.3,0,.4);truck.scale.set(1.35,1.35,1.35);G3.root.add(truck);
+    const dark=new THREE.MeshStandardMaterial({color:0x131d0d,roughness:.7});
+    const body=new THREE.MeshStandardMaterial({color:0x2a4218,emissive:0xb6ff3b,emissiveIntensity:.06,roughness:.45,metalness:.2});
+    const white=new THREE.MeshStandardMaterial({color:0xf0f5ea,roughness:.35,metalness:.1});
+    const bed=new THREE.Mesh(new THREE.BoxGeometry(2.5,.18,1.35),body);bed.position.set(-.35,.64,0);truck.add(bed);
+    const cab=new THREE.Mesh(new THREE.BoxGeometry(.8,.72,1.25),body);cab.position.set(1.42,.9,0);truck.add(cab);
+    const shield=new THREE.Mesh(new THREE.BoxGeometry(.07,.38,1.05),new THREE.MeshStandardMaterial({color:0x4fc3f7,emissive:0x4fc3f7,emissiveIntensity:.45,roughness:.2}));
+    shield.position.set(1.83,1,0);truck.add(shield);
+    const chassis=new THREE.Mesh(new THREE.BoxGeometry(3.4,.15,1.05),dark);chassis.position.set(.3,.48,0);truck.add(chassis);
+    const wheelGeo=new THREE.CylinderGeometry(.3,.3,.2,20);
+    for(const[wx,wz]of[[1.35,.68],[1.35,-.68],[-.85,.68],[-.85,-.68]]){
+      const w=new THREE.Mesh(wheelGeo,white);w.rotation.x=Math.PI/2;w.position.set(wx,.3,wz);truck.add(w)}
+    for(const hz of[.42,-.42]){const hl=makeGlow(0xfff6c0,.5,.8);hl.position.set(1.85,.62,hz);truck.add(hl)}
+    G3.truck=truck;
+    addDrag($('gl3'),G3.st);
+    const t0=performance.now();
+    (function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
+      fit(G3.el);
+      G3.st.idle+=1/60;if(G3.st.idle>1.4)G3.st.rotY+=.0032;
+      G3.root.rotation.y=G3.st.rotY;
+      if(G3.bestGlow)G3.bestGlow.material.opacity=.4+Math.sin(t*4)*.2;
+      r.render(s,c)})(t0);
+  }
+}
+function updateGA3D(force){
+  if(!GL||!G3.el)return;
+  const now=performance.now();
+  if(!force&&now-G3.last<220)return;G3.last=now;
+  /* towers */
+  if(G3.towers){G3.root.remove(G3.towers);G3.towers.traverse(o=>{if(o.geometry&&!o.__shared)o.geometry.dispose();if(o.isSprite)o.material.dispose()})}
+  const T=new THREE.Group();G3.towers=T;
+  const cols=Math.ceil(Math.sqrt(pop.length*1.7)),sp=.62;
+  const x0=-3-(cols-1)*sp/2,z0=0-(Math.ceil(pop.length/cols)-1)*sp/2;
+  let bi=0;for(let i=1;i<pop.length;i++)if(fit(pop[i])>fit(pop[bi]))bi=i;
+  const boxGeo=new THREE.BoxGeometry(.36,1,.36);
+  const redMat=new THREE.MeshStandardMaterial({color:0xff5d5d,emissive:0xff5d5d,emissiveIntensity:.25,roughness:.5});
+  pop.forEach((chr,i)=>{
+    const f=fit(chr),over=f===0;
+    const h=over?.07:.22+3.1*(f/(optimal||1));
+    const m=new THREE.Mesh(boxGeo,over?redMat:RAMP[Math.round(f/(optimal||1)*10)]);
+    m.scale.y=h;m.position.set(x0+(i%cols)*sp,h/2,z0+Math.floor(i/cols)*sp);m.__shared=true;T.add(m);
+    if(i===bi&&f>0){const gl=makeGlow(0xb6ff3b,1.5,.5);gl.position.set(m.position.x,h+.5,m.position.z);T.add(gl);G3.bestGlow=gl}});
+  G3.root.add(T);
+  /* crates on the truck */
+  if(G3.crates){G3.truck.remove(G3.crates);G3.crates.traverse(o=>{if(o.geometry)o.geometry.dispose()})}
+  const C=new THREE.Group();G3.crates=C;
+  const grey=new THREE.MeshStandardMaterial({color:0x4c5a48,roughness:.85});
+  let li=0;
+  ITEMS.forEach((it,i)=>{
+    const sz=Math.min(.58,.26+it[1]*.014);
+    if(bestEver&&bestEver[i]){
+      const m=new THREE.Mesh(new THREE.BoxGeometry(sz,sz,sz),RAMP[6+Math.min(4,it[2]/25|0)]);
+      const k=li++;
+      m.position.set(-1.25+(k%4)*.6,.73+sz/2+Math.floor(k/8)*.6,(Math.floor(k/4)%2)*.62-.31);
+      C.add(m);
+    }else{
+      const m=new THREE.Mesh(new THREE.BoxGeometry(sz*.8,sz*.8,sz*.8),grey);
+      m.position.set(3.1+(i%5)*.62,sz*.4,1.75+Math.floor(i/5)*.55);C.add(m)}});
+  G3.truck.add(C)}
+/* ================= page glue ================= */
+if(!GL){['nogl1','nogl2'].forEach(i=>{const e=$(i);if(e)e.style.display='grid'})}
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+const navLinks=[...document.querySelectorAll('nav .links a')];
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement,p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  $('prog').style.width=(p*100)+'%';
+  let cur='intro';for(const sec of['intro','dna','ga','end']){const el=document.getElementById(sec);
+    if(el&&el.getBoundingClientRect().top<140)cur=sec}
+  navLinks.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur))},{passive:true});
 reset();
-
-
-/* ---------- HERO: fly-through DNA tunnel ---------- */
-(function(){
-const words=['DNA','Nature','Hello','Evolve','Store'];let wi=0;
-function tick(){const w=words[wi++%words.length],t=toBases(w);$('tick').innerHTML='<b>"'+w+'"</b> &rarr; '+t.bits+'<br>&rarr; '+t.bases.replace(/(....)/g,'$1 ')}
-tick();setInterval(tick,2600);
-if(typeof THREE==='undefined')return;
-const cv=$('hero'),r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:false});r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.setClearColor(0x090d08,1);
-const sc=new THREE.Scene();sc.fog=new THREE.FogExp2(0x090d08,.03);
-const cam=new THREE.PerspectiveCamera(70,2,.1,200);
-sc.add(new THREE.AmbientLight(0xffffff,.55));const pl=new THREE.PointLight(0xb6ff3b,2.2,40);sc.add(pl);
-const msg=toBases('Nature-Inspired Data Storage Systems').bases;
-const N=260,R=2.6,RISE=.42,TURN=.62;
-const sph=new THREE.InstancedMesh(new THREE.SphereGeometry(1,12,8),new THREE.MeshStandardMaterial({roughness:.35,metalness:.2}),N*2);
-const cg=new THREE.CylinderGeometry(1,1,1,8);cg.rotateZ(Math.PI/2);
-const rung=new THREE.InstancedMesh(cg,new THREE.MeshStandardMaterial({roughness:.4}),N*2);
-const COLS={A:0x4fc3f7,C:0xffd54f,G:0xb6ff3b,T:0xff8a65},CMP={A:'T',T:'A',C:'G',G:'C'};
-const dm=new THREE.Object3D(),col=new THREE.Color(),base=[];
-for(let i=0;i<N;i++){const b=msg[i%msg.length],q=CMP[b],a=i*TURN,z=-i*RISE,cx=Math.cos(a),cy=Math.sin(a);
-  for(const [k,s,c] of [[0,1,b],[1,-1,q]]){
-    dm.position.set(cx*R*s,cy*R*s,z);dm.rotation.set(0,0,0);dm.scale.setScalar(.17);dm.updateMatrix();sph.setMatrixAt(i*2+k,dm.matrix);sph.setColorAt(i*2+k,col.set(0x7a8f70));
-    dm.position.set(cx*R*s/2,cy*R*s/2,z);dm.rotation.set(0,0,a);dm.scale.set(R/2,.06,.06);dm.updateMatrix();rung.setMatrixAt(i*2+k,dm.matrix);rung.setColorAt(i*2+k,col.set(COLS[c]));
-  }
-  base.push([COLS[b],COLS[q]]);}
-sph.instanceMatrix.needsUpdate=rung.instanceMatrix.needsUpdate=true;sc.add(sph,rung);
-// dust
-const P=1400,pp=new Float32Array(P*3);for(let i=0;i<P;i++){const a=Math.random()*6.28,rr=1+Math.random()*9;pp[i*3]=Math.cos(a)*rr;pp[i*3+1]=Math.sin(a)*rr;pp[i*3+2]=-Math.random()*N*RISE}
-const pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(pp,3));
-sc.add(new THREE.Points(pg,new THREE.PointsMaterial({color:0xb6ff3b,size:.06,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,depthWrite:false})));
-let mx=0,my=0,vis=true;
-addEventListener('pointermove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5)});
-new IntersectionObserver(e=>vis=e[0].isIntersecting).observe(cv);
-// mutation flashes: a rung turns red then votes back
-let flash=null;
-function pickFlash(z){const i=Math.max(0,Math.floor(-z/RISE)+8+(Math.random()*10|0));flash={i,t:0};}
-let t0=performance.now(),pz=0,lastF=0,w=0,h=0;
-function loop(now){requestAnimationFrame(loop);if(!vis)return;const dt=Math.min(.05,(now-t0)/1000);t0=now;
-  const cw=cv.clientWidth,ch=cv.clientHeight;if(cw!==w||ch!==h){w=cw;h=ch;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
-  pz+=dt*3.2;const span=(N-60)*RISE;const z=-(pz%span);
-  cam.position.set(-5.5+mx*2,1.8-my*1.5,z+2);cam.rotation.set(0,0,0);cam.lookAt(1.5,0,z-12);cam.rotateZ(Math.sin(now/5000)*.12);
-  pl.position.set(0,0,z-3);
-  if(!flash&&now-lastF>3200){pickFlash(z);lastF=now}
-  if(flash){flash.t+=dt;const i=flash.i;if(i<N){const red=flash.t<1.4;const k=(flash.t>=1.4&&flash.t<2.2)?.5:0;
-      rung.setColorAt(i*2,col.set(red?0xff3b3b:flash.t<2.2?0xffffff:base[i][0]));rung.setColorAt(i*2+1,col.set(flash.t<2.2?(red?0xff3b3b:0xffffff):base[i][1]));
-      if(flash.t>2.2){rung.setColorAt(i*2,col.set(base[i][0]));rung.setColorAt(i*2+1,col.set(base[i][1]));flash=null}
-      rung.instanceColor.needsUpdate=true}else flash=null}
-  r.render(sc,cam)}
-requestAnimationFrame(loop);
-})();
-
-/* ---------- 3D (Three.js) ---------- */
-(function(){
-if(typeof THREE==='undefined'){document.querySelectorAll('canvas.gl').forEach(c=>c.style.display='none');return}
-const live=[];
-function mk(canvas,fov,bg){const r=new THREE.WebGLRenderer({canvas,antialias:true});r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.setClearColor(bg||0x0a0f09,1);
-  const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(fov,2,.1,200);
-  s.add(new THREE.AmbientLight(0xffffff,.7));const d=new THREE.DirectionalLight(0xffffff,.9);d.position.set(5,10,8);s.add(d);
-  const o={r,s,c,canvas,visible:true,yaw:0,pitch:0,drag:false};
-  new IntersectionObserver(e=>{o.visible=e[0].isIntersecting}).observe(canvas);
-  canvas.addEventListener('pointerdown',e=>{o.drag=true;o.lx=e.clientX;o.ly=e.clientY;canvas.setPointerCapture(e.pointerId)});
-  canvas.addEventListener('pointerup',()=>o.drag=false);
-  canvas.addEventListener('pointermove',e=>{if(!o.drag)return;o.yaw+=(e.clientX-o.lx)*.01;o.pitch=Math.max(-.8,Math.min(.8,o.pitch+(e.clientY-o.ly)*.006));o.lx=e.clientX;o.ly=e.clientY});
-  live.push(o);return o}
-function fitR(o){const w=o.canvas.clientWidth,h=o.canvas.clientHeight;if(o.w!==w||o.h!==h){o.w=w;o.h=h;o.r.setSize(w,h,false);o.c.aspect=w/h;o.c.updateProjectionMatrix()}}
-const COL={A:0x4fc3f7,C:0xffd54f,G:0xb6ff3b,T:0xff8a65},CMP={A:'T',T:'A',C:'G',G:'C'},RED=0xff3b3b;
-const mat={};function M(c,e){const k=c+'_'+(e||0);return mat[k]||(mat[k]=new THREE.MeshStandardMaterial({color:c,roughness:.4,metalness:.1,emissive:e||0}))}
-/* --- helix --- */
-const H=mk($("helix"),38);H.c.position.set(0,0,10.5);H.c.lookAt(0,0,0);
-const axis=new THREE.Group(),spin=new THREE.Group();axis.rotation.z=Math.PI/2;axis.add(spin);H.s.add(axis);
-const WIN=56,SG=new THREE.SphereGeometry(1,14,10),CG=new THREE.CylinderGeometry(1,1,1,10);
-let hview='orig';
-function cyl(parent,m,x0,x1,r){const c=new THREE.Mesh(CG,m);c.rotation.z=Math.PI/2;c.scale.set(r,Math.abs(x1-x0),r);c.position.x=(x0+x1)/2;parent.add(c)}
-window.updateHelix=function(){
-  if(!dnaView)return;const seq=dnaView[hview],bad=hview==='copy'?dnaView.copyFlags:hview==='cons'?dnaView.consFlags:null;
-  const n=seq.length,mx=Math.max(0,n-WIN);$('hpos').max=mx;let st=Math.min(+$('hpos').value,mx);
-  while(spin.children.length){const g=spin.children.pop();}
-  const p1=[],p2=[];const len=Math.min(WIN,n);
-  for(let k=0;k<len;k++){const i=st+k,b=seq[i],q=CMP[b],isBad=bad&&bad[i];
-    const g=new THREE.Group();g.position.y=(k-len/2)*.3;g.rotation.y=k*.6;
-    const c1=isBad?RED:COL[b],c2=isBad?RED:COL[q];
-    cyl(g,M(c1),-1.1,0,.09);cyl(g,M(c2),0,1.1,.09);
-    for(const [x,c] of [[-1.1,c1],[1.1,c2]]){const s=new THREE.Mesh(SG,M(c,isBad?0x550000:0));s.scale.setScalar(isBad?.26:.18);s.position.x=x;g.add(s)}
-    spin.add(g);
-    const a=k*.6;p1.push(new THREE.Vector3(-1.1*Math.cos(a),(k-len/2)*.3,1.1*Math.sin(a)));p2.push(new THREE.Vector3(1.1*Math.cos(a),(k-len/2)*.3,-1.1*Math.sin(a)));
-  }
-  for(const p of [p1,p2]){const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(p),new THREE.LineBasicMaterial({color:0x93a58b}));spin.add(l)}
-  const nb=bad?bad.slice(st,st+len).reduce((a,b)=>a+b,0):0;
-  $('hinfo').textContent='Bases '+(st+1)+' to '+(st+len)+' of '+n+(bad?' ('+nb+' wrong in this window)':'');
-};
-$('hpos').oninput=updateHelix;
-document.querySelectorAll('#hsel button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#hsel button').forEach(x=>x.classList.remove('on'));b.classList.add('on');hview=b.dataset.v;updateHelix()});
-/* --- GA scene --- */
-const G=mk($('gl3'),42);G.c.position.set(0,7.5,13.5);G.c.lookAt(-.5,1.2,.5);
-const root=new THREE.Group();G.s.add(root);
-const grid=new THREE.GridHelper(30,30,0x26331f,0x1a2415);grid.position.y=0;root.add(grid);
-const towers=[];const BG=new THREE.BoxGeometry(1,1,1);
-for(let i=0;i<100;i++){const m=new THREE.Mesh(BG,new THREE.MeshStandardMaterial({color:0xb6ff3b,roughness:.5}));m.visible=false;m.userData={h:.05};root.add(m);towers.push(m)}
-const TX=5.2;// truck centre x
-const bed=new THREE.Mesh(new THREE.BoxGeometry(4.6,.2,4.6),new THREE.MeshStandardMaterial({color:0x3a4a32}));bed.position.set(TX,.55,0);root.add(bed);
-const rail=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(4.6,1.5,4.6)),new THREE.LineBasicMaterial({color:0xb6ff3b}));rail.position.set(TX,1.2,0);root.add(rail);
-const cab=new THREE.Mesh(new THREE.BoxGeometry(1.4,1.6,4.6),new THREE.MeshStandardMaterial({color:0x7fcf1a}));cab.position.set(TX-3.1,1.0,0);root.add(cab);
-const win=new THREE.Mesh(new THREE.BoxGeometry(.1,.7,3.6),new THREE.MeshStandardMaterial({color:0x10200a,emissive:0x1e3d10}));win.position.set(TX-3.8,1.35,0);root.add(win);
-for(const z of [-2.35,2.35]){const rl=new THREE.Mesh(new THREE.BoxGeometry(4.6,.5,.08),new THREE.MeshStandardMaterial({color:0x7fcf1a}));rl.position.set(TX,.9,z);root.add(rl)}
-const rr=new THREE.Mesh(new THREE.BoxGeometry(.08,.5,4.6),new THREE.MeshStandardMaterial({color:0x7fcf1a}));rr.position.set(TX+2.3,.9,0);root.add(rr);
-function label(t,x,y,z,wd){const c=document.createElement('canvas');c.width=1024;c.height=128;const g=c.getContext('2d');g.font='bold 56px sans-serif';const tw=Math.min(1000,g.measureText(t).width);g.fillStyle='#b6ff3b';g.textAlign='center';g.fillText(t,512,84,1000);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthTest:false}));const w=wd;s.scale.set(w,w/8,1);s.position.set(x,y,z);root.add(s)}
-label('Population (tower = one plan)',-6.5,5.3,0,8.5);label('Best plan on the truck',TX,3.8,0,7.5);label('Left behind',TX+3.6,.5,5,3.4);
-for(const [x,z] of [[-2,2.4],[-2,-2.4],[2,2.4],[2,-2.4],[-3.4,2.4],[-3.4,-2.4]]){const w=new THREE.Mesh(new THREE.CylinderGeometry(.4,.4,.35,16),new THREE.MeshStandardMaterial({color:0xf5f5f5,roughness:.5}));w.rotation.x=Math.PI/2;w.position.set(TX+x,.4,z);root.add(w)}
-const crates=ITEMS.map((it,i)=>{const s=.3+Math.cbrt(it[1])*.2;const col=new THREE.Color().setHSL(i/ITEMS.length*.9,.65,.55);
-  const m=new THREE.Mesh(new THREE.BoxGeometry(s,s,s),new THREE.MeshStandardMaterial({color:col,roughness:.6,transparent:true}));m.userData={s,tx:0,ty:0,tz:0,col};m.position.set(0,s/2,5);root.add(m);return m});
-window.snapGA3D=function(){window.__snap=1;setTimeout(()=>window.__snap=0,300)};
-window.updateGA3D=function(){
-  if(typeof bestEver==='undefined'||!bestEver)return;
-  const maxF=Math.max(optimal,1),cols=Math.ceil(Math.sqrt(pop.length)),sp=.55;
-  towers.forEach((t,i)=>{if(i>=pop.length){t.visible=false;return}t.visible=true;const f=fit(pop[i]);t.userData.h=f?Math.max(.1,f/maxF*4.2):.06;
-    const ratio=f/maxF;t.material.color.set(f?new THREE.Color().setHSL(.25,.9,.25+.35*ratio):0xff5d5d);
-    t.userData.x=-7.5+(i%cols-cols/2)*sp+.5;t.userData.z=(Math.floor(i/cols)-cols/2)*sp});
-  let slot=0,off=0;
-  crates.forEach((c,i)=>{const u=c.userData,on=bestEver[i];
-    if(on){const col=slot%4,row=Math.floor(slot/4)%4;u.tx=TX+(row-1.5)*1.1;u.tz=(col-1.5)*1.1;u.ty=.65+u.s/2+Math.floor(slot/16)*1.1;slot++;c.material.color.copy(u.col);c.material.opacity=1}
-    else{u.tx=TX-4.2+(off%6)*1.1;u.tz=4.6+Math.floor(off/6)*1.1;u.ty=u.s/2;off++;c.material.color.set(0x5d6b57);c.material.opacity=1}});
-};
-/* loop */
-let last=performance.now();
-function loop(t){requestAnimationFrame(loop);const dt=Math.min(.05,(t-last)/1000);last=t;
-  for(const o of live){if(!o.visible)continue;fitR(o)}
-  if(H.visible){spin.rotation.y+=dt*.8;axis.rotation.x=H.pitch;axis.rotation.y=H.yaw;H.r.render(H.s,H.c)}
-  if(G.visible){G.c.position.z=Math.max(13.5,13.5*2.1/G.c.aspect);G.c.position.y=7.5*G.c.position.z/13.5;G.c.lookAt(-.5,1.2,.5);root.rotation.y=Math.sin(t/4000)*.25+G.yaw;root.rotation.x=G.pitch*.5;
-    for(const m of towers){if(!m.visible)continue;const u=m.userData;m.scale.set(.4,m.scale.y+(u.h-m.scale.y)*.15,.4);m.position.set(u.x,m.scale.y/2,u.z)}
-    for(const c of crates){const u=c.userData;u.snap=!!window.__snap;const k=c.userData.snap?1:.14;c.position.x+=(u.tx-c.position.x)*k;c.position.y+=(u.ty+(Math.abs(u.tx-c.position.x)>.3?1.5:0)-c.position.y)*k;c.position.z+=(u.tz-c.position.z)*k}
-    G.r.render(G.s,G.c)}}
-requestAnimationFrame(loop);
-updateHelix();updateGA3D();
-})();
 </script>
 </body>
 </html>
