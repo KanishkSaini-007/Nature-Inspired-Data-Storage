@@ -133,6 +133,8 @@ canvas{width:100%;background:radial-gradient(600px 300px at 50% 20%,#101a0b,#080
 .gl3dwrap .nogl{position:absolute;inset:0;display:none;place-items:center;color:var(--mut);font-size:14px;text-align:center;padding:20px}
 .legend{display:flex;gap:16px;font-size:12.5px;color:var(--mut);flex-wrap:wrap;margin-top:8px}
 .legend span:before{content:"";display:inline-block;width:12px;height:3px;margin-right:7px;vertical-align:middle;background:var(--c);box-shadow:0 0 8px var(--c)}
+.how{background:#0a1008;border:1px solid var(--line2);border-radius:14px;padding:14px 18px;margin:10px 0 14px;font-size:14.5px;color:#c4d3ba}.how b{color:var(--lime)}.how ul{margin:8px 0 0;padding-left:20px}.how li{margin:5px 0}
+.manifest{display:grid;grid-template-columns:1fr;gap:8px;margin:12px 0 4px;font-size:14px}.manifest .mrow{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#080d06}.manifest .mrow.ok{border-color:var(--lime)}.manifest .mrow b{display:block;font:700 11.5px var(--fm);letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:4px}.manifest .mrow.ok b{color:var(--lime)}.manifest .mrow{display:flex;flex-wrap:wrap;gap:6px}.manifest .mrow b{flex:0 0 100%}.manifest .mrow span{display:inline-block;padding:4px 10px;border:1px solid var(--line2);border-radius:999px;background:#0e150b;white-space:nowrap;font-size:13.5px}.manifest .mrow.ok span{border-color:#b6ff3b66;color:#dff7b8}.manifest .mrow span i{font-style:normal;color:var(--mut);margin-left:4px}
 .items{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:6px}
 .it{background:#080d06;border:1px solid var(--line);border-radius:12px;padding:9px 11px;font-size:13px;transition:.25s}
 .it b{display:block;font-size:13.5px}.it span{color:var(--mut);font-size:12px}
@@ -157,13 +159,14 @@ tr:hover td{background:#b6ff3b08}
 footer{border-top:1px solid var(--line);padding:34px 0 46px;color:var(--mut);font-size:14px;margin-top:40px}
 footer b{color:var(--txt)}
 footer .fbrand{font:700 15px var(--fd);color:var(--lime);letter-spacing:.4px}
-@media(max-width:640px){.lab{padding:18px 16px}canvas.gl{height:320px}}
+.vsel{display:none;gap:8px;margin:8px 0}.vsel button{flex:1;padding:9px 10px;font-size:14px;background:transparent;border:1px solid var(--line2);color:var(--txt);border-radius:10px}.vsel button.on{background:var(--lime);color:#0c1a05;border-color:var(--lime)}
+@media(max-width:640px){.vsel{display:flex}.lab{padding:18px 16px}canvas.gl{height:235px}}
 </style>
 </head>
 <body>
 <div id="prog"></div>
 <nav>
-  <a class="brand" href="#intro"><span class="dot">🧬</span>NATURE-INSPIRED STORAGE</a>
+  <a class="brand" href="#intro"><span class="dot"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b6ff3b" stroke-width="2.2" stroke-linecap="round"><path d="M7 3c0 6 10 6 10 12s-10 6-10 6"/><path d="M17 3c0 6-10 6-10 12s10 6 10 6"/></svg></span>NATURE-INSPIRED STORAGE</a>
   <div class="links"><a href="#intro">Intro</a><a href="#dna">DNA Storage Lab</a><a href="#ga">Genetic Algorithm Lab</a><a href="#end">Summary</a></div>
 </nav>
 
@@ -175,8 +178,8 @@ footer .fbrand{font:700 15px var(--fd);color:var(--lime);letter-spacing:.4px}
       <h1>Nature-Inspired<br><span class="grad">Data Storage</span> Systems</h1>
       <p class="lead">Nature has been storing and improving information for billions of years. DNA keeps the instructions of every living thing, and evolution keeps finding better answers by trial and selection. This page turns both ideas into two labs you can play with.</p>
       <div class="btns">
-        <a href="#dna"><button>🧬 Enter the DNA Lab</button></a>
-        <a href="#ga"><button class="ghost">🚚 Enter the Evolution Lab</button></a>
+        <a href="#dna"><button>Enter the DNA Lab</button></a>
+        <a href="#ga"><button class="ghost">Enter the Evolution Lab</button></a>
       </div>
       <div class="chips">
         <span class="chip"><b>215 PB</b> per gram of DNA</span>
@@ -285,7 +288,7 @@ footer .fbrand{font:700 15px var(--fd);color:var(--lime);letter-spacing:.4px}
   </div>
 
   <div class="lab rv">
-    <h3>🚚 Genetic Algorithm Lab: relief truck loading</h3>
+    <h3>Genetic Algorithm Lab: relief truck loading</h3>
     <p class="lead" style="margin-top:4px">A truck can carry only a limited weight. Each item has a weight and a usefulness score. Find the load with the highest total score. If the truck is overloaded, that plan scores 0.</p>
     <div class="row">
       <div><label>Truck weight limit: <b id="capv">80</b> kg</label><input type="range" id="cap" min="30" max="150" value="80"></div>
@@ -307,9 +310,18 @@ footer .fbrand{font:700 15px var(--fd);color:var(--lime);letter-spacing:.4px}
     <div class="lbl"><span>Its chromosome (1 = take the item)</span></div>
     <div class="genes" id="genes"></div>
 
-    <div class="lbl"><span>3D view (drag to rotate)</span><span class="note">left: population towers &middot; right: best plan loaded on the truck</span></div>
+    <div class="how"><b>How to read this lab</b>
+      <ul>
+        <li><b>A plan</b> = one yes/no choice for each of the 15 items. In the row of 1s and 0s: 1 = put it on the truck, 0 = leave it behind.</li>
+        <li><b>A plan's score</b> = the total usefulness of the items it loads. If they weigh more than the truck limit, the plan fails and scores 0.</li>
+        <li><b>Evolution</b> = every generation we keep the best plans, mix two plans together, and randomly flip a few choices. Scores climb until the best possible load is found.</li>
+        <li><b>3D view</b> = the bars are the 8 best plans of this generation (taller = higher score). The truck carries what the best plan chose.</li>
+      </ul></div>
+    <div class="lbl"><span>3D view (drag to rotate)</span><span class="note">left: best plans ranked &middot; right: best plan loaded on the truck</span></div>
+    <div class="vsel" id="vsel"><button data-v="plans">Best plans</button><button data-v="truck" class="on">Truck load</button></div>
     <div class="gl3dwrap"><canvas id="gl3" class="gl"></canvas><div class="nogl" id="nogl2">3D needs internet (for the 3D library) and WebGL.<br>The charts below still work.</div></div>
-    <div class="legend"><span style="--c:#b6ff3b">tower = score of one plan (glowing = best)</span><span style="--c:#ff5d5d">flat red = overloaded plan (score 0)</span><span style="--c:#93a58b">grey crates = left behind</span></div>
+    <div class="manifest" id="manifest"></div>
+    <div class="legend"><span style="--c:#b6ff3b">bar = score of one plan (tallest glowing = best)</span><span style="--c:#ff5d5d">red = overloaded plan (score 0)</span><span style="--c:#93a58b">small grey crates = left behind</span></div>
     <div class="lbl"><span>Score over generations</span></div>
     <canvas id="gc" width="900" height="280"></canvas>
     <div class="legend"><span style="--c:#b6ff3b">best in generation</span><span style="--c:#93a58b">average of population</span><span style="--c:#ff8a65">best possible</span></div>
@@ -612,10 +624,12 @@ function draw(){
   $('g1').textContent=gen;$('g2').textContent=bf;$('g3').textContent=optimal;$('g4').textContent=w+' / '+cap;
   $('gbar').style.width=Math.min(100,bf/(optimal||1)*100)+'%';
   $('gverdict').innerHTML=bf===optimal?'<span class="badge ok">✔ Best possible load found</span>':bf===0?'<span class="badge no">no valid plan yet</span>':'<span class="badge mid">'+Math.round(bf/optimal*100)+'% of the best possible</span>';
-  $('items').innerHTML=ITEMS.map((it,i)=>`<div class="it ${b[i]?'on':''}"><b>${it[3]} ${it[0]}</b><span>${it[1]} kg &middot; score ${it[2]}</span></div>`).join('');
+  $('items').innerHTML=ITEMS.map((it,i)=>`<div class="it ${b[i]?'on':''}"><b>${it[0]}</b><span>${it[1]} kg &middot; score ${it[2]}</span></div>`).join('');
   $('genes').innerHTML=b.map(g=>`<i class="${g?'on':''}">${g}</i>`).join('');
   const top=pop.slice().sort((a,b)=>fit(b)-fit(a)).slice(0,5);
   $('top').innerHTML=top.map((c,i)=>`<tr><td>${i+1}</td><td class="mono">${c.join('')}</td><td>${wt(c)} kg${wt(c)>cap?' <span style="color:var(--red)">(too heavy)</span>':''}</td><td>${fit(c)}</td></tr>`).join('');
+  const ld=[],lf=[];ITEMS.forEach((it,i)=>(b[i]?ld:lf).push('<span>'+it[0]+' <i>'+it[1]+' kg</i></span>'));
+  $('manifest').innerHTML='<div class="mrow ok"><b>On the truck ('+w+' of '+cap+' kg, score '+bf+')</b>'+(ld.join('')||'nothing yet')+'</div><div class="mrow"><b>Left behind</b>'+(lf.join('')||'nothing')+'</div>';
   chart();updateGA3D()}
 function chart(){
   const cv=$('gc'),x=cv.getContext('2d'),W=cv.width,H=cv.height,pad=44;x.clearRect(0,0,W,H);
@@ -641,45 +655,83 @@ $('cap').oninput=()=>$('capv').textContent=$('cap').value;
 $('pop').oninput=()=>$('popv').textContent=$('pop').value;
 $('mut').oninput=()=>{mutRate=$('mut').value/100;$('mutv').textContent=$('mut').value+'%'};
 $('spd').oninput=()=>{$('spdv').textContent=SPNAME[$('spd').value];if(timer){stop();start()}};
-/* ------- GA 3D ------- */
-const G3={el:null,st:{rotY:0,rotX:0,idle:99},towers:null,crates:null,last:0,bestGlow:null};
-const RAMP=[];
+/* ------- GA 3D (redesign proposal) ------- */
+const G3={view:'truck',el:null,st:{rotY:0,rotX:0,idle:99},pod:null,crates:null,last:0,bestGlow:null};
+const _lab={},_crT={};
+function labelTex(txt,col,px){const k=txt+col+px;if(_lab[k])return _lab[k];
+  const c=document.createElement('canvas'),x=c.getContext('2d');x.font='700 '+px+'px "JetBrains Mono", monospace';
+  const w=Math.ceil(x.measureText(txt).width)+24,h=px+20;c.width=w;c.height=h;
+  x.font='700 '+px+'px "JetBrains Mono", monospace';x.textBaseline='middle';x.textAlign='center';
+  x.fillStyle='rgba(8,13,6,.78)';x.beginPath();x.roundRect?x.roundRect(0,0,w,h,10):x.rect(0,0,w,h);x.fill();
+  x.strokeStyle=col;x.globalAlpha=.55;x.lineWidth=2;x.stroke();x.globalAlpha=1;
+  x.fillStyle=col;x.fillText(txt,w/2,h/2+1);
+  const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;t.__ar=w/h;return _lab[k]=t}
+function label(txt,col,hgt,px){const t=labelTex(txt,col||'#eaf3e3',px||34);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false}));
+  const K=matchMedia('(max-width:640px)').matches?(txt.length<14?1.55:1.1):1;s.scale.set(hgt*t.__ar*K,hgt*K,1);s.renderOrder=10;return s}
+function crateMat(i,grey){const k=i+(grey?'g':'');if(_crT[k])return _crT[k];
+  const it=ITEMS[i],c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');
+  x.fillStyle=grey?'#2b3327':'#3d6a14';x.fillRect(0,0,256,256);
+  x.strokeStyle=grey?'#5b6856':'#b6ff3b';x.lineWidth=12;x.strokeRect(6,6,244,244);
+  x.fillStyle=grey?'#5b6856':'#274510';x.fillRect(0,170,256,10);
+  x.textAlign='center';x.textBaseline='middle';
+  const words=SHORT[i].split(' ');let fs=words.length>1?58:(SHORT[i].length>8?50:64);
+  x.font='800 '+fs+'px sans-serif';x.fillStyle=grey?'#aab8a5':'#ffffff';
+  words.forEach((w,j)=>x.fillText(w,128,(words.length>1?70+j*60:100)));
+  x.font='800 62px sans-serif';x.fillStyle=grey?'#c9d6bf':'#eaffc8';x.fillText(it[1]+' kg',128,214);
+  const t=new THREE.CanvasTexture(c);t.anisotropy=4;
+  return _crT[k]=new THREE.MeshStandardMaterial({map:t,roughness:.6,metalness:.05,emissive:grey?0x000000:0x2a5a08,emissiveIntensity:grey?0:.3})}
+const SHORT=['Medicine','Water','Food','Blankets','Generator','Tents','Radio','Torches','Tool box','Fuel','Ropes','Baby food','Laptop','Solar panel','Books'];
+const BOX=new THREE.BoxGeometry(1,1,1);
 if(GL){
-  for(let i=0;i<=10;i++){const t=i/10;
-    RAMP.push(new THREE.MeshStandardMaterial({color:new THREE.Color().lerpColors(new THREE.Color(0x243616),new THREE.Color(0xb6ff3b),t),emissive:0xb6ff3b,emissiveIntensity:.04+t*.32,roughness:.45,metalness:.1}))}
   G3.el=makeScene($('gl3'),$('nogl2'));
   if(G3.el){
-    const{r,s,c}=G3.el;s.fog=new THREE.Fog(0x080d06,11,26);
-    c.position.set(.4,4.4,10.6);c.lookAt(.4,1.05,0);
-    s.add(new THREE.AmbientLight(0xffffff,.6));
-    const d=new THREE.DirectionalLight(0xf4ffe0,.8);d.position.set(4,8,6);s.add(d);
-    const p=new THREE.PointLight(0xb6ff3b,.9,26);p.position.set(-4,4,-3);s.add(p);
+    const{r,s,c}=G3.el;s.fog=new THREE.Fog(0x080d06,16,34);
+    c.fov=40;
+    s.add(new THREE.AmbientLight(0xffffff,.75));
+    const d=new THREE.DirectionalLight(0xf4ffe0,.9);d.position.set(4,9,7);s.add(d);
+    const p=new THREE.PointLight(0xb6ff3b,.8,30);p.position.set(-5,5,-2);s.add(p);
     G3.root=new THREE.Group();s.add(G3.root);
-    const ground=new THREE.Mesh(new THREE.CircleGeometry(11,48),new THREE.MeshStandardMaterial({color:0x0a1008,roughness:.9}));
+    const ground=new THREE.Mesh(new THREE.CircleGeometry(13,64),new THREE.MeshStandardMaterial({color:0x0a1008,roughness:.9}));
     ground.rotation.x=-Math.PI/2;G3.root.add(ground);
-    const grid=new THREE.GridHelper(22,22,0x2e4a1a,0x15210e);grid.position.y=.01;G3.root.add(grid);
-    /* --- truck (built once) --- */
-    const truck=new THREE.Group();truck.position.set(4.3,0,.4);truck.scale.set(1.35,1.35,1.35);G3.root.add(truck);
-    const dark=new THREE.MeshStandardMaterial({color:0x131d0d,roughness:.7});
-    const body=new THREE.MeshStandardMaterial({color:0x2a4218,emissive:0xb6ff3b,emissiveIntensity:.06,roughness:.45,metalness:.2});
-    const white=new THREE.MeshStandardMaterial({color:0xf0f5ea,roughness:.35,metalness:.1});
-    const bed=new THREE.Mesh(new THREE.BoxGeometry(2.5,.18,1.35),body);bed.position.set(-.35,.64,0);truck.add(bed);
-    const cab=new THREE.Mesh(new THREE.BoxGeometry(.8,.72,1.25),body);cab.position.set(1.42,.9,0);truck.add(cab);
-    const shield=new THREE.Mesh(new THREE.BoxGeometry(.07,.38,1.05),new THREE.MeshStandardMaterial({color:0x4fc3f7,emissive:0x4fc3f7,emissiveIntensity:.45,roughness:.2}));
-    shield.position.set(1.83,1,0);truck.add(shield);
-    const chassis=new THREE.Mesh(new THREE.BoxGeometry(3.4,.15,1.05),dark);chassis.position.set(.3,.48,0);truck.add(chassis);
-    const wheelGeo=new THREE.CylinderGeometry(.3,.3,.2,20);
-    for(const[wx,wz]of[[1.35,.68],[1.35,-.68],[-.85,.68],[-.85,-.68]]){
-      const w=new THREE.Mesh(wheelGeo,white);w.rotation.x=Math.PI/2;w.position.set(wx,.3,wz);truck.add(w)}
-    for(const hz of[.42,-.42]){const hl=makeGlow(0xfff6c0,.5,.8);hl.position.set(1.85,.62,hz);truck.add(hl)}
+    const grid=new THREE.GridHelper(26,26,0x2e4a1a,0x15210e);grid.position.y=.01;G3.root.add(grid);
+    /* --- truck --- */
+    const truck=new THREE.Group();truck.position.set(3.7,0,0);truck.scale.set(1.15,1.15,1.15);G3.root.add(truck);
+    const dark=new THREE.MeshStandardMaterial({color:0x10180b,roughness:.8});
+    const body=new THREE.MeshStandardMaterial({color:0x35561d,emissive:0xb6ff3b,emissiveIntensity:.1,roughness:.4,metalness:.3});
+    const lime=new THREE.MeshStandardMaterial({color:0xb6ff3b,emissive:0xb6ff3b,emissiveIntensity:.15,roughness:.5});
+    const glass=new THREE.MeshStandardMaterial({color:0x4fc3f7,emissive:0x4fc3f7,emissiveIntensity:.5,roughness:.2,transparent:true,opacity:.85});
+    const rail=new THREE.MeshStandardMaterial({color:0x5c8a2b,emissive:0xb6ff3b,emissiveIntensity:.12,roughness:.5,transparent:true,opacity:.55});
+    const add=(g,m,w,h,dd,x,y,z)=>{const o=new THREE.Mesh(g,m);o.scale.set(w,h,dd);o.position.set(x,y,z);truck.add(o);return o};
+    add(BOX,dark,4.9,.18,1.7,0,.62,0);            /* chassis */
+    add(BOX,body,3.5,.12,1.75,-.55,.74,0);        /* bed floor */
+    add(BOX,rail,3.5,.5,.06,-.55,1.0,.86);add(BOX,rail,3.5,.5,.06,-.55,1.0,-.86);
+    add(BOX,rail,.06,.5,1.75,-2.3,1.0,0);add(BOX,rail,.06,.5,1.75,1.2,1.0,0);
+    add(BOX,body,1.15,1.05,1.7,1.95,1.25,0);      /* cab */
+    add(BOX,body,.5,.5,1.6,2.62,.95,0);           /* hood */
+    add(BOX,glass,.06,.5,1.35,2.54,1.5,0);        /* windscreen */
+    add(BOX,glass,.7,.4,1.76,1.95,1.5,0);         /* side windows */
+    add(BOX,lime,.1,.12,1.75,2.9,.74,0);          /* bumper */
+    add(BOX,lime,3.5,.05,1.8,-.55,.82,0);         /* bed edge light */
+    for(const hz of[.55,-.55]){const hl=makeGlow(0xfff6c0,.9,.9);hl.position.set(2.92,.98,hz);truck.add(hl)}
+    const tire=new THREE.CylinderGeometry(.42,.42,.34,28),hub=new THREE.CylinderGeometry(.17,.17,.36,20);
+    for(const[wx,wz]of[[1.9,.88],[1.9,-.88],[-1.0,.88],[-1.0,-.88],[-2.0,.88],[-2.0,-.88]]){
+      const w=new THREE.Mesh(tire,dark);w.rotation.x=Math.PI/2;w.position.set(wx,.42,wz);truck.add(w);
+      const h=new THREE.Mesh(hub,lime);h.rotation.x=Math.PI/2;h.position.set(wx,.42,wz);truck.add(h)}
     G3.truck=truck;
     addDrag($('gl3'),G3.st);
     const t0=performance.now();
     (function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
       fitView(G3.el);
-      G3.st.idle+=1/60;if(G3.st.idle>1.4)G3.st.rotY+=.0032;
-      G3.root.rotation.y=G3.st.rotY;
-      if(G3.bestGlow)G3.bestGlow.material.opacity=.4+Math.sin(t*4)*.2;
+      const asp=(c.aspect||2),mob=matchMedia('(max-width:640px)').matches,V=mob?G3.view:'both';
+      const cx=V==='plans'?-3.1:V==='truck'?3.6:0,hw=V==='plans'?4.0:V==='truck'?4.5:7.4;
+      const dist=Math.max(V==='both'?8.5:7,hw/(Math.tan(c.fov*Math.PI/360)*asp));
+      c.position.set(cx,dist*.38,dist);c.lookAt(cx,1.3,0);
+      if(G3.pod)G3.pod.visible=V!=='truck';G3.truck.visible=V!=='plans';
+      if(V==='both'){G3.st.idle+=1/60;if(G3.st.idle>1.4)G3.st.auto=(G3.st.auto||0)+.006;
+        G3.root.rotation.y=G3.st.rotY+Math.sin(G3.st.auto||0)*.28;G3.root.rotation.x=G3.st.rotX*.5}
+      else{G3.root.rotation.y=0;G3.root.rotation.x=0;G3.st.rotY=0;G3.st.rotX=0}
+      if(G3.bestGlow)G3.bestGlow.material.opacity=.45+Math.sin(t*4)*.2;
       r.render(s,c)})(t0);
   }
 }
@@ -687,37 +739,45 @@ function updateGA3D(force){
   if(!GL||!G3.el)return;
   const now=performance.now();
   if(!force&&now-G3.last<220)return;G3.last=now;
-  /* towers */
-  if(G3.towers){G3.root.remove(G3.towers);G3.towers.traverse(o=>{if(o.geometry&&!o.__shared)o.geometry.dispose();if(o.isSprite)o.material.dispose()})}
-  const T=new THREE.Group();G3.towers=T;
-  const cols=Math.ceil(Math.sqrt(pop.length*1.7)),sp=.62;
-  const x0=-3-(cols-1)*sp/2,z0=0-(Math.ceil(pop.length/cols)-1)*sp/2;
-  let bi=0;for(let i=1;i<pop.length;i++)if(fit(pop[i])>fit(pop[bi]))bi=i;
-  const boxGeo=new THREE.BoxGeometry(.36,1,.36);
-  const redMat=new THREE.MeshStandardMaterial({color:0xff5d5d,emissive:0xff5d5d,emissiveIntensity:.25,roughness:.5});
-  pop.forEach((chr,i)=>{
-    const f=fit(chr),over=f===0;
-    const h=over?.07:.22+3.1*(f/(optimal||1));
-    const m=new THREE.Mesh(boxGeo,over?redMat:RAMP[Math.round(f/(optimal||1)*10)]);
-    m.scale.y=h;m.position.set(x0+(i%cols)*sp,h/2,z0+Math.floor(i/cols)*sp);m.__shared=true;T.add(m);
-    if(i===bi&&f>0){const gl=makeGlow(0xb6ff3b,1.5,.5);gl.position.set(m.position.x,h+.5,m.position.z);T.add(gl);G3.bestGlow=gl}});
-  G3.root.add(T);
-  /* crates on the truck */
-  if(G3.crates){G3.truck.remove(G3.crates);G3.crates.traverse(o=>{if(o.geometry)o.geometry.dispose()})}
+  const kill=g=>{if(!g)return;G3.root.remove(g);g.traverse(o=>{if(o.isSprite)o.material.dispose()})};
+  kill(G3.pod);
+  const P=new THREE.Group();G3.pod=P;
+  const opt=optimal||1;
+  const sorted=pop.map(ch=>fit(ch)).sort((a,b)=>b-a);
+  const over=sorted.filter(v=>v===0).length;
+  const top=sorted.slice(0,8);
+  const sp=.8,x0=-6.1;
+  const base=new THREE.Mesh(BOX,new THREE.MeshStandardMaterial({color:0x121b0d,roughness:.7}));
+  base.scale.set(8*sp+.2,.1,1.5);base.position.set(x0+3.5*sp,.05,0);P.add(base);
+  top.forEach((f,i)=>{
+    const h=Math.max(.12,3*f/opt);
+    const m=new THREE.Mesh(BOX,f===0?new THREE.MeshStandardMaterial({color:0xff5d5d,emissive:0xff5d5d,emissiveIntensity:.3}):
+      new THREE.MeshStandardMaterial({color:new THREE.Color().lerpColors(new THREE.Color(0x2c4a16),new THREE.Color(0xb6ff3b),f/opt),emissive:0xb6ff3b,emissiveIntensity:i===0?.5:.12,roughness:.4,metalness:.15}));
+    m.scale.set(.4,h,.6);m.position.set(x0+i*sp,.1+h/2,0);P.add(m);
+    const sc=label(String(f),i===0?'#b6ff3b':'#c9d6bf',.34,30);sc.position.set(x0+i*sp,h+.5,0);P.add(sc);
+    const rk=label('#'+(i+1),'#8fa185',.26,26);rk.position.set(x0+i*sp,-.0+.05,.85);rk.position.y=.12;P.add(rk);
+    if(i===0&&f>0){const gl=makeGlow(0xb6ff3b,1.8,.5);gl.position.set(x0,h+.2,0);P.add(gl);G3.bestGlow=gl}});
+  const t1=label('GENERATION '+gen+': TOP 8 PLANS (score)','#b6ff3b',.36,30);t1.position.set(x0+3.5*sp,3.95,0);P.add(t1);
+  if(over){const t2=label(over+' of '+pop.length+' plans were overloaded (score 0)','#ff8a8a',.3,26);t2.position.set(x0+3.5*sp,-.7,1.3);P.add(t2)}
+  G3.root.add(P);
+  /* crates */
+  if(G3.crates){G3.truck.remove(G3.crates);G3.crates.traverse(o=>{if(o.isSprite)o.material.dispose()})}
   const C=new THREE.Group();G3.crates=C;
-  const grey=new THREE.MeshStandardMaterial({color:0x4c5a48,roughness:.85});
-  let li=0;
-  ITEMS.forEach((it,i)=>{
-    const sz=Math.min(.58,.26+it[1]*.014);
-    if(bestEver&&bestEver[i]){
-      const m=new THREE.Mesh(new THREE.BoxGeometry(sz,sz,sz),RAMP[6+Math.min(4,it[2]/25|0)]);
-      const k=li++;
-      m.position.set(-1.25+(k%4)*.6,.73+sz/2+Math.floor(k/8)*.6,(Math.floor(k/4)%2)*.62-.31);
-      C.add(m);
-    }else{
-      const m=new THREE.Mesh(new THREE.BoxGeometry(sz*.8,sz*.8,sz*.8),grey);
-      m.position.set(3.1+(i%5)*.62,sz*.4,1.75+Math.floor(i/5)*.55);C.add(m)}});
+  const loaded=[],left=[];ITEMS.forEach((it,i)=>(bestEver&&bestEver[i]?loaded:left).push(i));
+  loaded.sort((a,b)=>ITEMS[b][1]-ITEMS[a][1]);
+  let wsum=0;
+  loaded.forEach((i,k)=>{
+    const it=ITEMS[i],sz=Math.min(.8,.46+it[1]*.011);wsum+=it[1];
+    const col=k%4,row=Math.floor(k/4)%2,layer=Math.floor(k/8);
+    const m=new THREE.Mesh(BOX,crateMat(i,false));m.scale.set(sz,sz,sz);
+    m.position.set(-1.95+col*.84,.8+sz/2+layer*.78,row*.8-.4);m.rotation.y=((k*37)%7-3)*.02;C.add(m)});
+  left.forEach((i,k)=>{
+    const sz=.38,m=new THREE.Mesh(BOX,crateMat(i,true));m.scale.set(sz,sz,sz);
+    m.position.set(-2.8+k*.47,sz/2,2.3);C.add(m)});
+  const tl=label('TRUCK LOAD '+wsum+' / '+cap+' kg',wsum<=cap?'#b6ff3b':'#ff8a8a',.4,30);tl.position.set(-.5,3.2,0);C.add(tl);
+  if(left.length){const ll=label('LEFT BEHIND','#93a58b',.26,24);ll.position.set(.35,.9,2.2);C.add(ll)}
   G3.truck.add(C)}
+document.querySelectorAll('#vsel button').forEach(b=>b.onclick=()=>{G3.view=b.dataset.v;document.querySelectorAll('#vsel button').forEach(x=>x.classList.toggle('on',x===b))});
 /* ================= page glue ================= */
 if(!GL){['nogl1','nogl2'].forEach(i=>{const e=$(i);if(e)e.style.display='grid'})}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}}),{threshold:.12});
@@ -732,4 +792,4 @@ window.addEventListener('scroll',()=>{
 reset();
 </script>
 </body>
-                                                                                                                        </html>
+  </html>
