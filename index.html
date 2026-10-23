@@ -362,6 +362,15 @@ function barBetween(a,b,r,mat){const d=b.clone().sub(a),len=d.length();
   m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());return m}
 const _sphGeo={};
 function sphGeo(r){const k='s'+r;if(!_sphGeo[k])_sphGeo[k]=new THREE.SphereGeometry(r,18,14);return _sphGeo[k]}
+const _dimMats={};
+function dimMat(col){const k='d'+col;
+  if(!_dimMats[k]){const c=new THREE.Color(col).lerp(new THREE.Color(0x2a3620),.45);
+    _dimMats[k]=new THREE.MeshStandardMaterial({color:c,emissive:col,emissiveIntensity:.18,roughness:.5,metalness:.1});}
+  return _dimMats[k]}
+const _tubeMatDim={};
+function tubeMatDim(){if(!_tubeMatDim.m)_tubeMatDim.m=new THREE.MeshStandardMaterial({color:0x1c2c11,emissive:0xb6ff3b,emissiveIntensity:.03,roughness:.6,metalness:.1});return _tubeMatDim.m}
+let _bondMat=null;
+function bondMat(){if(!_bondMat)_bondMat=new THREE.MeshStandardMaterial({color:0x6b8f3f,emissive:0xb6ff3b,emissiveIntensity:.14,roughness:.6,metalness:.05});return _bondMat}
 const _tubeMat={};
 function tubeMat(){if(!_tubeMat.m)_tubeMat.m=new THREE.MeshStandardMaterial({color:0x2e4a1a,emissive:0xb6ff3b,emissiveIntensity:.08,roughness:.5,metalness:.15});return _tubeMat.m}
 
@@ -371,11 +380,11 @@ function buildHelix(seq,flags,o){
   const g=new THREE.Group();g.userData.geo=[];g.userData.bad=[];g.userData.fix=[];
   const n=seq.length,y0=-(n-1)*o.rise/2;
   if(o.backbone!==false){
-    for(const ph of [0,Math.PI]){
+    for(const[pi,ph]of[[0,0],[1,Math.PI]]){
       const pts=[];for(let i=0;i<n;i++){const a=i*o.twist+ph;
         pts.push(new THREE.Vector3(Math.cos(a)*o.radius,y0+i*o.rise,Math.sin(a)*o.radius))}
       const geo=new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),Math.max(40,n*6),o.sphereR*.45,8,false);
-      g.userData.geo.push(geo);g.add(new THREE.Mesh(geo,tubeMat()));
+      g.userData.geo.push(geo);g.add(new THREE.Mesh(geo,pi===0?tubeMat():tubeMatDim()));
     }
   }
   for(let i=0;i<n;i++){
@@ -387,11 +396,12 @@ function buildHelix(seq,flags,o){
     const c2=new THREE.Vector3(p2.x*.36,y,p2.z*.36);
     const col1=f==='bad'?0xff5d5d:BC[b1],col2=BC[b2];
     const r1=barBetween(p1,c1,o.sphereR*.34,baseMat(col1,35));g.userData.geo.push(r1.geometry);g.add(r1);
-    const r2=barBetween(p2,c2,o.sphereR*.34,baseMat(col2,35));g.userData.geo.push(r2.geometry);g.add(r2);
+    const r2=barBetween(p2,c2,o.sphereR*.34,baseMat(col2,28));g.userData.geo.push(r2.geometry);g.add(r2);
+    const bond=barBetween(c1,c2,o.sphereR*.26,bondMat());g.userData.geo.push(bond.geometry);g.add(bond);
     const s1=new THREE.Mesh(sphGeo(o.sphereR),baseMat(col1,f==='bad'?85:60));s1.position.copy(c1);g.add(s1);
-    const s2=new THREE.Mesh(sphGeo(o.sphereR),baseMat(col2,60));s2.position.copy(c2);g.add(s2);
+    const s2=new THREE.Mesh(sphGeo(o.sphereR*.8),dimMat(col2));s2.position.copy(c2);g.add(s2);
     const gl1=makeGlow(col1,o.glow,f==='bad'?.55:.34);gl1.position.copy(c1);g.add(gl1);
-    const gl2=makeGlow(col2,o.glow,.3);gl2.position.copy(c2);g.add(gl2);
+    const gl2=makeGlow(col2,o.glow*.8,.15);gl2.position.copy(c2);g.add(gl2);
     if(f==='bad'){g.userData.bad.push({m:s1,g:gl1})}
     if(f==='fix'){const gf=makeGlow(0xb6ff3b,o.glow*1.9,.5);gf.position.copy(c1);g.add(gf);g.userData.fix.push({m:s1,g:gf})}
   }
@@ -400,10 +410,10 @@ function disposeHelix(g){if(!g)return;g.traverse(o=>{if(o.isSprite&&o.material)o
   (g.userData.geo||[]).forEach(x=>x.dispose());if(g.parent)g.parent.remove(g)}
 function makeScene(canvas,noGLEl){
   let r;try{r=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true})}catch(e){if(noGLEl)noGLEl.style.display='grid';return null}
-  r.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  r.setPixelRatio(Math.min((devicePixelRatio||1)*1.75,2.2));
   const s=new THREE.Scene(),c=new THREE.PerspectiveCamera(50,2,.1,120);
   return{r,s,c}}
-function fit(o){const cv=o.r.domElement,w=cv.clientWidth||600,h=cv.clientHeight||400;
+function fitView(o){const cv=o.r.domElement,w=cv.clientWidth||600,h=cv.clientHeight||400;
   if(cv.__w!==w||cv.__h!==h){cv.__w=w;cv.__h=h;o.r.setSize(w,h,false);o.c.aspect=w/h;o.c.updateProjectionMatrix()}}
 function addDrag(canvas,st){let down=false,px=0,py=0;
   canvas.addEventListener('pointerdown',e=>{down=true;px=e.clientX;py=e.clientY;try{canvas.setPointerCapture(e.pointerId)}catch(_){}});
@@ -460,7 +470,7 @@ let mx=0,my=0,tx=0,ty=0;
 window.addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5)*1.4;ty=(e.clientY/innerHeight-.5)*-.9});
 let t0=performance.now();
 (function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
-  fit(o);spin.rotation.y=t*.32;
+  fitView(o);spin.rotation.y=t*.32;
   tilt.position.y=Math.sin(t*.45)*.22;
   mx+=(tx-mx)*.04;my+=(ty-my)*.04;
   c.position.x=mx*1.1;c.position.y=.3+my;c.lookAt(0,0,0);
@@ -542,7 +552,7 @@ if(GL){
     addDrag($('helix'),HL.st);
     const t0=performance.now();
     (function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
-      fit(HL.el);
+      fitView(HL.el);
       HL.st.idle+=1/60;
       if(HL.st.idle>1.2)HL.st.rotY+=.006;
       HL.spin.rotation.y=HL.st.rotY;HL.tilt.rotation.x=HL.st.rotX*.5+.08;
@@ -666,7 +676,7 @@ if(GL){
     addDrag($('gl3'),G3.st);
     const t0=performance.now();
     (function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
-      fit(G3.el);
+      fitView(G3.el);
       G3.st.idle+=1/60;if(G3.st.idle>1.4)G3.st.rotY+=.0032;
       G3.root.rotation.y=G3.st.rotY;
       if(G3.bestGlow)G3.bestGlow.material.opacity=.4+Math.sin(t*4)*.2;
@@ -722,4 +732,4 @@ window.addEventListener('scroll',()=>{
 reset();
 </script>
 </body>
-</html>
+                                                                                                                        </html>
