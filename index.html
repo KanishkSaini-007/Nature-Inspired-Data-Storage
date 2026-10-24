@@ -279,56 +279,40 @@ footer .fbrand{font:700 15px var(--fd);color:var(--lime);letter-spacing:.4px}
       </ol></div>
     <div class="card"><h3>Where it is used</h3>
       <ul>
-        <li><b>Packing and storage:</b> choosing which items or files fit best in limited space (the knapsack problem, which you can try below).</li>
+        <li><b>Packing and storage:</b> choosing which items or files fit best in limited space (the knapsack problem).</li>
         <li><b>Timetables and scheduling:</b> exam and shift plans with many rules.</li>
         <li><b>Routes:</b> delivery and travelling-salesman style problems.</li>
         <li><b>Engineering design:</b> NASA used an evolved antenna shape on its ST5 spacecraft.</li>
       </ul>
-      <p class="note">Link to storage: deciding what to keep on a drive with limited space is the same type of problem as loading a truck.</p></div>
+      <p class="note">Link to storage: deciding what to keep on a drive with limited space is a packing problem, and evolution-style search is good at packing problems.</p></div>
   </div>
 
+  <style>
+.wrow{display:flex;align-items:center;gap:6px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#080d06;margin:10px 0;transition:border-color .3s;flex-wrap:wrap}
+.wrow.parent{border-color:var(--lime)}
+.wtile{width:36px;height:44px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:8px;background:#131b0f;font:700 19px var(--fm);color:var(--mut);transition:all .3s}
+.wtile.on{background:#16240e;color:var(--lime);border-color:var(--lime);box-shadow:0 0 14px #b6ff3b55}
+.wtile.flip{border-color:#ff8a65;box-shadow:0 0 14px #ff8a65aa}
+.wscore{margin-left:auto;font:700 17px var(--fm);color:var(--txt);white-space:nowrap}
+.wtag{font:600 11px var(--fm);letter-spacing:.08em;text-transform:uppercase;color:var(--mut);min-width:52px;text-align:right}
+.wrow.parent .wtag{color:var(--lime)}
+#wtarget{background:#080d06;border:1px solid var(--line2);color:var(--txt);border-radius:12px;padding:10px 14px;font:700 16px var(--fm);letter-spacing:2px;text-transform:uppercase;width:180px}
+  </style>
   <div class="lab rv">
-    <h3>Genetic Algorithm Lab: relief truck loading</h3>
-    <p class="lead" style="margin-top:4px">A truck can carry only a limited weight. Each item has a weight and a usefulness score. Find the load with the highest total score. If the truck is overloaded, that plan scores 0.</p>
+    <h3>Genetic Algorithm Lab: watch gibberish evolve into a word</h3>
+    <p class="lead" style="margin-top:4px">Goal: turn random letters into the target word. Each string of letters is one answer, and its score is simply how many letters are already correct. Evolution keeps the better strings, mixes two of them into a new one, and sometimes changes one letter at random. Repeat, and the word appears.</p>
     <div class="row">
-      <div><label>Truck weight limit: <b id="capv">80</b> kg</label><input type="range" id="cap" min="30" max="150" value="80"></div>
-      <div><label>Population size: <b id="popv">30</b></label><input type="range" id="pop" min="10" max="100" value="30"></div>
-      <div><label>Mutation rate: <b id="mutv">3%</b> per gene</label><input type="range" id="mut" min="0" max="20" value="3"></div>
-      <div><label>Speed: <b id="spdv">medium</b></label><input type="range" id="spd" min="1" max="5" value="3"></div>
+      <div><label>Target word: <input type="text" id="wtarget" value="HELLO" maxlength="10"></label></div>
     </div>
-    <div class="btns"><button id="run">▶ Start evolving</button><button class="ghost" id="step">⏭ One generation</button><button class="ghost" id="fin">⏩ Jump to generation 100</button><button class="ghost" id="reset">↺ New random population</button></div>
-
+    <div class="btns"><button id="wrun">▶ Start evolving</button><button class="ghost" id="wstep">⏭ One generation</button><button class="ghost" id="wreset">↺ New random strings</button></div>
     <div class="stats">
-      <div class="stat"><b id="g1">0</b><span>generation</span></div>
-      <div class="stat"><b id="g2">0</b><span>best score so far</span></div>
-      <div class="stat"><b id="g3">0</b><span>best possible (exact check)</span></div>
-      <div class="stat"><b id="g4">0 / 80</b><span>best load weight (kg)</span></div>
+      <div class="stat"><b id="wg">0</b><span>generation</span></div>
+      <div class="stat"><b id="wb">0 / 5</b><span>best score so far</span></div>
     </div>
-    <div class="bar"><div id="gbar" style="width:0"></div></div>
-    <div class="lbl"><span>Best plan found: <span id="gverdict"></span></span><span class="note">lime = loaded on the truck</span></div>
-    <div class="items" id="items"></div>
-    <div class="lbl"><span>Its chromosome (1 = take the item)</span></div>
-    <div class="genes" id="genes"></div>
-
-    <div class="how"><b>How to read this lab</b>
-      <ul>
-        <li><b>A plan</b> = one yes/no choice for each of the 15 items. In the row of 1s and 0s: 1 = put it on the truck, 0 = leave it behind.</li>
-        <li><b>A plan's score</b> = the total usefulness of the items it loads. If they weigh more than the truck limit, the plan fails and scores 0.</li>
-        <li><b>Evolution</b> = every generation we keep the best plans, mix two plans together, and randomly flip a few choices. Scores climb until the best possible load is found.</li>
-        <li><b>3D view</b> = the bars are the 8 best plans of this generation (taller = higher score). The truck carries what the best plan chose.</li>
-      </ul></div>
-    <div class="lbl"><span>3D view (drag to rotate)</span><span class="note">left: best plans ranked &middot; right: best plan loaded on the truck</span></div>
-    <div class="vsel" id="vsel"><button data-v="plans">Best plans</button><button data-v="truck" class="on">Truck load</button></div>
-    <div class="gl3dwrap"><canvas id="gl3" class="gl"></canvas><div class="nogl" id="nogl2">3D needs internet (for the 3D library) and WebGL.<br>The charts below still work.</div></div>
-    <div class="manifest" id="manifest"></div>
-    <div class="legend"><span style="--c:#b6ff3b">bar = score of one plan (tallest glowing = best)</span><span style="--c:#ff5d5d">red = overloaded plan (score 0)</span><span style="--c:#93a58b">small grey crates = left behind</span></div>
-    <div class="lbl"><span>Score over generations</span></div>
-    <canvas id="gc" width="900" height="280"></canvas>
-    <div class="legend"><span style="--c:#b6ff3b">best in generation</span><span style="--c:#93a58b">average of population</span><span style="--c:#ff8a65">best possible</span></div>
-
-    <div class="lbl"><span>Top 5 plans in the current population</span></div>
-    <table><thead><tr><th>#</th><th>Chromosome</th><th>Weight</th><th>Score</th></tr></thead><tbody id="top"></tbody></table>
-    <p class="note">Try this: set mutation to 0% and see the search get stuck. Then set it to about 3% again. Make the truck limit smaller and run again.</p>
+    <div class="lbl"><span id="wstage">Random strings. Score = correct letters (lime).</span></div>
+    <div id="wpop"></div>
+    <div class="legend"><span style="--c:#b6ff3b">correct letter</span><span style="--c:#5a6b52">wrong letter</span><span style="--c:#b6ff3b">lime border = kept as parent</span><span style="--c:#ff8a65">orange flash = one random change</span></div>
+    <p class="note">For a 5-letter word there are about 12 million possible strings - pure random guessing would take ages. Evolution gets there in a few dozen generations by keeping what works. A generation can occasionally look worse right after a random change - that is normal, and the kept parents carry the good letters forward.</p>
   </div>
 </section>
 
@@ -594,190 +578,77 @@ document.querySelectorAll('#hsel button').forEach(b=>b.onclick=()=>{
 dnaRun();
 </script>
 <script>
-/* ================= GA LAB ================= */
-const ITEMS=[['Medicine kit',4,90,'💊'],['Water cans',20,60,'💧'],['Food packs',15,70,'🍚'],['Blankets',10,40,'🛏️'],['Generator',30,100,'⚡'],['Tents',25,80,'⛺'],['Radio set',3,50,'📻'],['Torches',2,25,'🔦'],['Tool box',12,45,'🧰'],['Fuel can',18,55,'⛽'],['Ropes',6,20,'🪢'],['Baby food',5,65,'🍼'],['Laptop',4,35,'💻'],['Solar panel',14,60,'☀️'],['First-aid books',2,10,'📕']];
-const N=ITEMS.length;
-let cap=80,popSize=30,mutRate=.03,pop=[],gen=0,hist=[],bestEver=null,timer=null,optimal=0;
-const SPEEDS=[null,900,450,200,80,25],SPNAME=['','very slow','slow','medium','fast','very fast'];
-function wt(c){let w=0;for(let i=0;i<N;i++)if(c[i])w+=ITEMS[i][1];return w}
-function val(c){let v=0;for(let i=0;i<N;i++)if(c[i])v+=ITEMS[i][2];return v}
-function fit(c){return wt(c)<=cap?val(c):0}
-function exact(){const d=new Array(cap+1).fill(0);for(const it of ITEMS){for(let w=cap;w>=it[1];w--)d[w]=Math.max(d[w],d[w-it[1]]+it[2])}return d[cap]}
-function rnd(){return Array.from({length:N},()=>Math.random()<.35?1:0)}
-function reset(){stop();cap=+$('cap').value;popSize=+$('pop').value;mutRate=$('mut').value/100;
-  gen=0;hist=[];pop=Array.from({length:popSize},rnd);optimal=exact();bestEver=null;record();draw()}
-function record(){let best=pop[0],sum=0;for(const c of pop){sum+=fit(c);if(fit(c)>fit(best))best=c}
-  if(!bestEver||fit(best)>fit(bestEver))bestEver=best.slice();
-  hist.push({best:fit(best),avg:sum/pop.length})}
-function tourney(){let a=pop[Math.random()*pop.length|0],b=pop[Math.random()*pop.length|0],c=pop[Math.random()*pop.length|0];
-  let r=a;if(fit(b)>fit(r))r=b;if(fit(c)>fit(r))r=c;return r}
-function nextGen(){
-  const sorted=pop.slice().sort((a,b)=>fit(b)-fit(a));
-  const nx=[sorted[0].slice(),sorted[1]?sorted[1].slice():sorted[0].slice()];
-  while(nx.length<popSize){const p1=tourney(),p2=tourney(),cut=1+Math.random()*(N-1)|0;
-    const ch=[];for(let i=0;i<N;i++){let g=i<cut?p1[i]:p2[i];if(Math.random()<mutRate)g=1-g;ch.push(g)}nx.push(ch)}
-  pop=nx;gen++;record()}
-function draw(){
-  const b=bestEver,bf=fit(b),w=wt(b);
-  $('capv').textContent=$('cap').value;$('popv').textContent=$('pop').value;
-  $('mutv').textContent=$('mut').value+'%';$('spdv').textContent=SPNAME[$('spd').value];
-  $('g1').textContent=gen;$('g2').textContent=bf;$('g3').textContent=optimal;$('g4').textContent=w+' / '+cap;
-  $('gbar').style.width=Math.min(100,bf/(optimal||1)*100)+'%';
-  $('gverdict').innerHTML=bf===optimal?'<span class="badge ok">✔ Best possible load found</span>':bf===0?'<span class="badge no">no valid plan yet</span>':'<span class="badge mid">'+Math.round(bf/optimal*100)+'% of the best possible</span>';
-  $('items').innerHTML=ITEMS.map((it,i)=>`<div class="it ${b[i]?'on':''}"><b>${it[0]}</b><span>${it[1]} kg &middot; score ${it[2]}</span></div>`).join('');
-  $('genes').innerHTML=b.map(g=>`<i class="${g?'on':''}">${g}</i>`).join('');
-  const top=pop.slice().sort((a,b)=>fit(b)-fit(a)).slice(0,5);
-  $('top').innerHTML=top.map((c,i)=>`<tr><td>${i+1}</td><td class="mono">${c.join('')}</td><td>${wt(c)} kg${wt(c)>cap?' <span style="color:var(--red)">(too heavy)</span>':''}</td><td>${fit(c)}</td></tr>`).join('');
-  const ld=[],lf=[];ITEMS.forEach((it,i)=>(b[i]?ld:lf).push('<span>'+it[0]+' <i>'+it[1]+' kg</i></span>'));
-  $('manifest').innerHTML='<div class="mrow ok"><b>On the truck ('+w+' of '+cap+' kg, score '+bf+')</b>'+(ld.join('')||'nothing yet')+'</div><div class="mrow"><b>Left behind</b>'+(lf.join('')||'nothing')+'</div>';
-  chart();updateGA3D()}
-function chart(){
-  const cv=$('gc'),x=cv.getContext('2d'),W=cv.width,H=cv.height,pad=44;x.clearRect(0,0,W,H);
-  const maxG=Math.max(100,hist.length-1),maxV=Math.max(optimal*1.1,10);
-  x.strokeStyle='#243419';x.fillStyle='#8fa185';x.font='12px JetBrains Mono, monospace';x.lineWidth=1;
-  for(let k=0;k<=4;k++){const y=H-pad-(H-2*pad)*k/4;x.beginPath();x.moveTo(pad,y);x.lineTo(W-14,y);x.stroke();x.fillText(Math.round(maxV*k/4),6,y+4)}
-  for(let g=0;g<=maxG;g+=20){const px=pad+(W-pad-14)*g/maxG;x.fillText(g,px-6,H-pad+20)}
-  x.fillText('generation',W/2-28,H-8);
-  const X=i=>pad+(W-pad-14)*i/maxG,Y=v=>H-pad-(H-2*pad)*v/maxV;
-  x.setLineDash([6,5]);x.strokeStyle='#ff8a65';x.lineWidth=2;x.beginPath();x.moveTo(pad,Y(optimal));x.lineTo(W-14,Y(optimal));x.stroke();x.setLineDash([]);
-  for(const[k,col]of[['avg','#8fa185'],['best','#b6ff3b']]){x.strokeStyle=col;x.lineWidth=k==='best'?3:2;
-    if(k==='best'){x.shadowColor=col;x.shadowBlur=8}
-    x.beginPath();hist.forEach((h,i)=>{i?x.lineTo(X(i),Y(h[k])):x.moveTo(X(i),Y(h[k]))});x.stroke();x.shadowBlur=0}}
-function stop(){if(timer){clearInterval(timer);timer=null}$('run').textContent='▶ Start evolving'}
-function start(){if(timer)return;$('run').textContent='⏸ Pause';
-  timer=setInterval(()=>{if(gen>=100){stop();return}nextGen();draw()},SPEEDS[$('spd').value])}
-$('run').onclick=()=>{if(timer)stop();else{if(gen>=100)reset();start()}};
-$('step').onclick=()=>{stop();nextGen();draw()};
-$('fin').onclick=()=>{stop();while(gen<100)nextGen();draw()};
-$('reset').onclick=reset;
-['cap','pop'].forEach(i=>$(i).onchange=reset);
-$('cap').oninput=()=>$('capv').textContent=$('cap').value;
-$('pop').oninput=()=>$('popv').textContent=$('pop').value;
-$('mut').oninput=()=>{mutRate=$('mut').value/100;$('mutv').textContent=$('mut').value+'%'};
-$('spd').oninput=()=>{$('spdv').textContent=SPNAME[$('spd').value];if(timer){stop();start()}};
-/* ------- GA 3D (redesign proposal) ------- */
-const G3={view:'truck',el:null,st:{rotY:0,rotX:0,idle:99},pod:null,crates:null,last:0,bestGlow:null};
-const _lab={},_crT={};
-function labelTex(txt,col,px){const k=txt+col+px;if(_lab[k])return _lab[k];
-  const c=document.createElement('canvas'),x=c.getContext('2d');x.font='700 '+px+'px "JetBrains Mono", monospace';
-  const w=Math.ceil(x.measureText(txt).width)+24,h=px+20;c.width=w;c.height=h;
-  x.font='700 '+px+'px "JetBrains Mono", monospace';x.textBaseline='middle';x.textAlign='center';
-  x.fillStyle='rgba(8,13,6,.78)';x.beginPath();x.roundRect?x.roundRect(0,0,w,h,10):x.rect(0,0,w,h);x.fill();
-  x.strokeStyle=col;x.globalAlpha=.55;x.lineWidth=2;x.stroke();x.globalAlpha=1;
-  x.fillStyle=col;x.fillText(txt,w/2,h/2+1);
-  const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearFilter;t.__ar=w/h;return _lab[k]=t}
-function label(txt,col,hgt,px){const t=labelTex(txt,col||'#eaf3e3',px||34);
-  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false}));
-  const K=matchMedia('(max-width:640px)').matches?(txt.length<14?1.55:1.1):1;s.scale.set(hgt*t.__ar*K,hgt*K,1);s.renderOrder=10;return s}
-function crateMat(i,grey){const k=i+(grey?'g':'');if(_crT[k])return _crT[k];
-  const it=ITEMS[i],c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');
-  x.fillStyle=grey?'#2b3327':'#3d6a14';x.fillRect(0,0,256,256);
-  x.strokeStyle=grey?'#5b6856':'#b6ff3b';x.lineWidth=12;x.strokeRect(6,6,244,244);
-  x.fillStyle=grey?'#5b6856':'#274510';x.fillRect(0,170,256,10);
-  x.textAlign='center';x.textBaseline='middle';
-  const words=SHORT[i].split(' ');let fs=words.length>1?58:(SHORT[i].length>8?50:64);
-  x.font='800 '+fs+'px sans-serif';x.fillStyle=grey?'#aab8a5':'#ffffff';
-  words.forEach((w,j)=>x.fillText(w,128,(words.length>1?70+j*60:100)));
-  x.font='800 62px sans-serif';x.fillStyle=grey?'#c9d6bf':'#eaffc8';x.fillText(it[1]+' kg',128,214);
-  const t=new THREE.CanvasTexture(c);t.anisotropy=4;
-  return _crT[k]=new THREE.MeshStandardMaterial({map:t,roughness:.6,metalness:.05,emissive:grey?0x000000:0x2a5a08,emissiveIntensity:grey?0:.3})}
-const SHORT=['Medicine','Water','Food','Blankets','Generator','Tents','Radio','Torches','Tool box','Fuel','Ropes','Baby food','Laptop','Solar panel','Books'];
-const BOX=new THREE.BoxGeometry(1,1,1);
-if(GL){
-  G3.el=makeScene($('gl3'),$('nogl2'));
-  if(G3.el){
-    const{r,s,c}=G3.el;s.fog=new THREE.Fog(0x080d06,16,34);
-    c.fov=40;
-    s.add(new THREE.AmbientLight(0xffffff,.75));
-    const d=new THREE.DirectionalLight(0xf4ffe0,.9);d.position.set(4,9,7);s.add(d);
-    const p=new THREE.PointLight(0xb6ff3b,.8,30);p.position.set(-5,5,-2);s.add(p);
-    G3.root=new THREE.Group();s.add(G3.root);
-    const ground=new THREE.Mesh(new THREE.CircleGeometry(13,64),new THREE.MeshStandardMaterial({color:0x0a1008,roughness:.9}));
-    ground.rotation.x=-Math.PI/2;G3.root.add(ground);
-    const grid=new THREE.GridHelper(26,26,0x2e4a1a,0x15210e);grid.position.y=.01;G3.root.add(grid);
-    /* --- truck --- */
-    const truck=new THREE.Group();truck.position.set(3.7,0,0);truck.scale.set(1.15,1.15,1.15);G3.root.add(truck);
-    const dark=new THREE.MeshStandardMaterial({color:0x10180b,roughness:.8});
-    const body=new THREE.MeshStandardMaterial({color:0x35561d,emissive:0xb6ff3b,emissiveIntensity:.1,roughness:.4,metalness:.3});
-    const lime=new THREE.MeshStandardMaterial({color:0xb6ff3b,emissive:0xb6ff3b,emissiveIntensity:.15,roughness:.5});
-    const glass=new THREE.MeshStandardMaterial({color:0x4fc3f7,emissive:0x4fc3f7,emissiveIntensity:.5,roughness:.2,transparent:true,opacity:.85});
-    const rail=new THREE.MeshStandardMaterial({color:0x5c8a2b,emissive:0xb6ff3b,emissiveIntensity:.12,roughness:.5,transparent:true,opacity:.55});
-    const add=(g,m,w,h,dd,x,y,z)=>{const o=new THREE.Mesh(g,m);o.scale.set(w,h,dd);o.position.set(x,y,z);truck.add(o);return o};
-    add(BOX,dark,4.9,.18,1.7,0,.62,0);            /* chassis */
-    add(BOX,body,3.5,.12,1.75,-.55,.74,0);        /* bed floor */
-    add(BOX,rail,3.5,.5,.06,-.55,1.0,.86);add(BOX,rail,3.5,.5,.06,-.55,1.0,-.86);
-    add(BOX,rail,.06,.5,1.75,-2.3,1.0,0);add(BOX,rail,.06,.5,1.75,1.2,1.0,0);
-    add(BOX,body,1.15,1.05,1.7,1.95,1.25,0);      /* cab */
-    add(BOX,body,.5,.5,1.6,2.62,.95,0);           /* hood */
-    add(BOX,glass,.06,.5,1.35,2.54,1.5,0);        /* windscreen */
-    add(BOX,glass,.7,.4,1.76,1.95,1.5,0);         /* side windows */
-    add(BOX,lime,.1,.12,1.75,2.9,.74,0);          /* bumper */
-    add(BOX,lime,3.5,.05,1.8,-.55,.82,0);         /* bed edge light */
-    for(const hz of[.55,-.55]){const hl=makeGlow(0xfff6c0,.9,.9);hl.position.set(2.92,.98,hz);truck.add(hl)}
-    const tire=new THREE.CylinderGeometry(.42,.42,.34,28),hub=new THREE.CylinderGeometry(.17,.17,.36,20);
-    for(const[wx,wz]of[[1.9,.88],[1.9,-.88],[-1.0,.88],[-1.0,-.88],[-2.0,.88],[-2.0,-.88]]){
-      const w=new THREE.Mesh(tire,dark);w.rotation.x=Math.PI/2;w.position.set(wx,.42,wz);truck.add(w);
-      const h=new THREE.Mesh(hub,lime);h.rotation.x=Math.PI/2;h.position.set(wx,.42,wz);truck.add(h)}
-    G3.truck=truck;
-    addDrag($('gl3'),G3.st);
-    const t0=performance.now();
-    (function loop(now){requestAnimationFrame(loop);const t=(now-t0)/1000;
-      fitView(G3.el);
-      const asp=(c.aspect||2),mob=matchMedia('(max-width:640px)').matches,V=mob?G3.view:'both';
-      const cx=V==='plans'?-3.1:V==='truck'?3.6:0,hw=V==='plans'?4.0:V==='truck'?4.5:7.4;
-      const dist=Math.max(V==='both'?8.5:7,hw/(Math.tan(c.fov*Math.PI/360)*asp));
-      c.position.set(cx,dist*.38,dist);c.lookAt(cx,1.3,0);
-      if(G3.pod)G3.pod.visible=V!=='truck';G3.truck.visible=V!=='plans';
-      if(V==='both'){G3.st.idle+=1/60;if(G3.st.idle>1.4)G3.st.auto=(G3.st.auto||0)+.006;
-        G3.root.rotation.y=G3.st.rotY+Math.sin(G3.st.auto||0)*.28;G3.root.rotation.x=G3.st.rotX*.5}
-      else{G3.root.rotation.y=0;G3.root.rotation.x=0;G3.st.rotY=0;G3.st.rotX=0}
-      if(G3.bestGlow)G3.bestGlow.material.opacity=.45+Math.sin(t*4)*.2;
-      r.render(s,c)})(t0);
+/* ================= GA LAB: EVOLVE A WORD ================= */
+var ALPH='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var WTARGET='HELLO',WLEN=5,WPOPN=8;
+var wpop=[],wgen=0,wbest=-1,wtimer=null,wparents=[],wchildFrom=[],wflip=[];
+function wRandStr(){var s='';for(var i=0;i<WLEN;i++)s+=ALPH[Math.floor(Math.random()*26)];return s}
+function wScore(s){var n=0;for(var i=0;i<WLEN;i++)if(s[i]===WTARGET[i])n++;return n}
+function wRender(stage){
+  var wrap=$('wpop');wrap.innerHTML='';
+  for(var k=0;k<wpop.length;k++){
+    var row=document.createElement('div');row.className='wrow';
+    if(wparents.indexOf(k)>-1)row.className+=' parent';
+    for(var i=0;i<WLEN;i++){
+      var t=document.createElement('div');
+      t.className='wtile'+(wpop[k][i]===WTARGET[i]?' on':'');
+      if(wflip[k]===i)t.className+=' flip';
+      t.textContent=wpop[k][i];
+      row.appendChild(t);
+    }
+    var sc=document.createElement('div');sc.className='wscore';sc.textContent=wScore(wpop[k])+' / '+WLEN;row.appendChild(sc);
+    var tag=document.createElement('div');tag.className='wtag';
+    tag.textContent=wparents.indexOf(k)>-1?'parent':(wchildFrom[k]||'');row.appendChild(tag);
+    wrap.appendChild(row);
   }
+  $('wg').textContent=wgen;
+  $('wb').textContent=wbest+' / '+WLEN;
+  $('wstage').textContent=stage;
 }
-function updateGA3D(force){
-  if(!GL||!G3.el)return;
-  const now=performance.now();
-  if(!force&&now-G3.last<220)return;G3.last=now;
-  const kill=g=>{if(!g)return;G3.root.remove(g);g.traverse(o=>{if(o.isSprite)o.material.dispose()})};
-  kill(G3.pod);
-  const P=new THREE.Group();G3.pod=P;
-  const opt=optimal||1;
-  const sorted=pop.map(ch=>fit(ch)).sort((a,b)=>b-a);
-  const over=sorted.filter(v=>v===0).length;
-  const top=sorted.slice(0,8);
-  const sp=.8,x0=-6.1;
-  const base=new THREE.Mesh(BOX,new THREE.MeshStandardMaterial({color:0x121b0d,roughness:.7}));
-  base.scale.set(8*sp+.2,.1,1.5);base.position.set(x0+3.5*sp,.05,0);P.add(base);
-  top.forEach((f,i)=>{
-    const h=Math.max(.12,3*f/opt);
-    const m=new THREE.Mesh(BOX,f===0?new THREE.MeshStandardMaterial({color:0xff5d5d,emissive:0xff5d5d,emissiveIntensity:.3}):
-      new THREE.MeshStandardMaterial({color:new THREE.Color().lerpColors(new THREE.Color(0x2c4a16),new THREE.Color(0xb6ff3b),f/opt),emissive:0xb6ff3b,emissiveIntensity:i===0?.5:.12,roughness:.4,metalness:.15}));
-    m.scale.set(.4,h,.6);m.position.set(x0+i*sp,.1+h/2,0);P.add(m);
-    const sc=label(String(f),i===0?'#b6ff3b':'#c9d6bf',.34,30);sc.position.set(x0+i*sp,h+.5,0);P.add(sc);
-    const rk=label('#'+(i+1),'#8fa185',.26,26);rk.position.set(x0+i*sp,-.0+.05,.85);rk.position.y=.12;P.add(rk);
-    if(i===0&&f>0){const gl=makeGlow(0xb6ff3b,1.8,.5);gl.position.set(x0,h+.2,0);P.add(gl);G3.bestGlow=gl}});
-  const t1=label('GENERATION '+gen+': TOP 8 PLANS (score)','#b6ff3b',.36,30);t1.position.set(x0+3.5*sp,3.95,0);P.add(t1);
-  if(over){const t2=label(over+' of '+pop.length+' plans were overloaded (score 0)','#ff8a8a',.3,26);t2.position.set(x0+3.5*sp,-.7,1.3);P.add(t2)}
-  G3.root.add(P);
-  /* crates */
-  if(G3.crates){G3.truck.remove(G3.crates);G3.crates.traverse(o=>{if(o.isSprite)o.material.dispose()})}
-  const C=new THREE.Group();G3.crates=C;
-  const loaded=[],left=[];ITEMS.forEach((it,i)=>(bestEver&&bestEver[i]?loaded:left).push(i));
-  loaded.sort((a,b)=>ITEMS[b][1]-ITEMS[a][1]);
-  let wsum=0;
-  loaded.forEach((i,k)=>{
-    const it=ITEMS[i],sz=Math.min(.8,.46+it[1]*.011);wsum+=it[1];
-    const col=k%4,row=Math.floor(k/4)%2,layer=Math.floor(k/8);
-    const m=new THREE.Mesh(BOX,crateMat(i,false));m.scale.set(sz,sz,sz);
-    m.position.set(-1.95+col*.84,.8+sz/2+layer*.78,row*.8-.4);m.rotation.y=((k*37)%7-3)*.02;C.add(m)});
-  left.forEach((i,k)=>{
-    const sz=.38,m=new THREE.Mesh(BOX,crateMat(i,true));m.scale.set(sz,sz,sz);
-    m.position.set(-2.8+k*.47,sz/2,2.3);C.add(m)});
-  const tl=label('TRUCK LOAD '+wsum+' / '+cap+' kg',wsum<=cap?'#b6ff3b':'#ff8a8a',.4,30);tl.position.set(-.5,3.2,0);C.add(tl);
-  if(left.length){const ll=label('LEFT BEHIND','#93a58b',.26,24);ll.position.set(.35,.9,2.2);C.add(ll)}
-  G3.truck.add(C)}
-document.querySelectorAll('#vsel button').forEach(b=>b.onclick=()=>{G3.view=b.dataset.v;document.querySelectorAll('#vsel button').forEach(x=>x.classList.toggle('on',x===b))});
+function wNewPop(){
+  var inp=$('wtarget');
+  var v=(inp.value||'HELLO').toUpperCase().replace(/[^A-Z]/g,'');
+  if(v.length<2)v='HELLO';
+  WTARGET=v.slice(0,10);WLEN=WTARGET.length;inp.value=WTARGET;
+  wpop=[];for(var k=0;k<WPOPN;k++)wpop.push(wRandStr());
+  wgen=0;wbest=-1;wparents=[];wchildFrom=[];wflip=[];
+  for(k=0;k<WPOPN;k++)wbest=Math.max(wbest,wScore(wpop[k]));
+  wRender('Random strings. Score = correct letters (lime). Press Start evolving.');
+}
+function wGen(){
+  wgen++;
+  var scored=wpop.map(function(s,k){return{s:s,k:k,sc:wScore(s)}});
+  scored.sort(function(a,b){return b.sc-a.sc});
+  wbest=Math.max(wbest,scored[0].sc);
+  var keep=scored.slice(0,4);
+  var newpop=keep.map(function(o){return o.s});
+  var childFrom=['','','',''],flip=[-1,-1,-1,-1,-1,-1,-1,-1];
+  var cut=Math.floor(WLEN/2);
+  for(var c=0;c<4;c++){
+    var a=keep[c%keep.length].s,b=keep[(c+1)%keep.length].s;
+    var child=a.slice(0,cut)+b.slice(cut);
+    var f=-1;
+    if(Math.random()<.5){f=Math.floor(Math.random()*WLEN);child=child.slice(0,f)+ALPH[Math.floor(Math.random()*26)]+child.slice(f+1);}
+    newpop.push(child);childFrom.push('child');flip.push(f);
+  }
+  wpop=newpop;wparents=[0,1,2,3];wchildFrom=childFrom;wflip=flip;
+  var done=wbest>=WLEN;
+  wRender(done?('Done - evolution built "'+WTARGET+'" in '+wgen+' generation'+(wgen===1?'':'s')+', out of millions of possible strings!')
+             :('Generation '+wgen+': best 4 kept as parents (lime border). Children mix two parents; an orange flash = one random letter change.'));
+  if(done)wStop();
+}
+function wStop(){if(wtimer){clearInterval(wtimer);wtimer=null}$('wrun').textContent='▶ Start evolving'}
+$('wrun').onclick=function(){
+  if(wtimer){wStop();return}
+  if(wbest>=WLEN)wNewPop();
+  $('wrun').textContent='⏸ Pause';
+  wtimer=setInterval(wGen,1300);
+};
+$('wstep').onclick=function(){wStop();if(wbest<WLEN)wGen()};
+$('wreset').onclick=function(){wStop();wNewPop()};
+$('wtarget').onchange=function(){wStop();wNewPop()};
+wNewPop();
+
 /* ================= page glue ================= */
 if(!GL){['nogl1','nogl2'].forEach(i=>{const e=$(i);if(e)e.style.display='grid'})}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}}),{threshold:.12});
@@ -789,7 +660,6 @@ window.addEventListener('scroll',()=>{
   let cur='intro';for(const sec of['intro','dna','ga','end']){const el=document.getElementById(sec);
     if(el&&el.getBoundingClientRect().top<140)cur=sec}
   navLinks.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur))},{passive:true});
-reset();
 </script>
 </body>
-  </html>
+</html>
